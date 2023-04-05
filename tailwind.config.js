@@ -3,8 +3,12 @@ module.exports = {
   content: ["./src/**/*.{js,ts,jsx,tsx}","./components/**/*.{js,ts,jsx,tsx}"],
   theme: {
     colors: {
+      "roxo-primario": "#5F4B8B",
+      "roxo-secundario": "#3C2F58",
+      
+      "cinza-primario": "#D9D9D9",
 
-      "Roxo1" : "#5F4B8B"
+      "branco-primario": "#FFFFFF",
     },
     extend: {},
   },
