@@ -5,10 +5,12 @@ import Image from "next/image";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
 
 const ModalEnvioPlanilha = () => {
-  // const { } = useModal()
+  const { isOpen } = useModal();
 
   return (
-    <div className="w-[25%] h-screen bg-branco-primario flex flex-col justify-around items-center z-20">
+    <div
+      className={`w-[25%] h-screen bg-branco-primario flex flex-col justify-around items-center z-10`}
+    >
       <Image src={Icon_Robo} alt=""></Image>
       <p className="text-roxo-primario text-xl">
         Preciso de mais informações antes de validar a planilha.
