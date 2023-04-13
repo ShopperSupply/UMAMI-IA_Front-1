@@ -25,12 +25,13 @@ const ModalContext = createContext<IModalContext>({
 
 export const ModalProvider = ({ children }: IModalProvider) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [content, setContent] = useState<JSX.Element>();
+  const [content, setContent] = useState<JSX.Element | undefined>(undefined);
   const [isReversed, setIsReversed] = useState<boolean>(false);
 
   function hideModal() {
     // Esconder o Modal ja aberto, essa função deve ser chamada para fechar um modal.
     setIsOpen(false);
+    setContent(undefined);
   }
   function showModal() {
     // Mostrar um modal oculto, essa função deve ser chamada no componente para abrir o modal.
@@ -59,4 +60,4 @@ export const ModalProvider = ({ children }: IModalProvider) => {
   );
 };
 
-export const useModal = () => useContext(ModalContext)
+export const useModal = () => useContext(ModalContext);
