@@ -12,13 +12,21 @@ import {
 import { IoMdAddCircle } from "react-icons/io";
 import Logo_Shopper from "../../../public/Logo_Shopper.svg";
 import { useModal } from "@/providers/modaisProvider";
+import ModalEnvioPlanilha from "../modalEnvioPlanilha";
 
 const Menu = () => {
-
-  const {setContent, showModal} = useModal();
+  const { setContent, showModal } = useModal();
 
   return (
     <div className="flex flex-col justify-between fixed w-[21.2rem] h-screen drop-shadow-xl bg-branco-primario text-roxo-primario text-[1.8rem]">
+      <button
+        onClick={() => {
+          setContent(ModalEnvioPlanilha);
+          showModal();
+        }}
+      >
+        Planilha
+      </button>
       <div>
         <Image
           src={Logo_Shopper}
