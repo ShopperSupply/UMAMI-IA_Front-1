@@ -1,10 +1,11 @@
 import Image from "next/image";
 import iconRobo from "../../../public/Icon_Robo.svg";
 import { HiOutlineShoppingBag } from "react-icons/hi";
+import { HiOutlineArrowUpTray } from "react-icons/hi2";
 
 const ModalPadraoDeSacola = () => {
   return (
-    <div className="flex flex-col w-[25%] h-screen bg-branco-primario drop-shadow-md">
+    <div className="flex flex-col justify-center items-center gap-[3rem] w-[25%] h-screen bg-branco-primario drop-shadow-md">
       <Image src={iconRobo} alt="Incone robô de qualidade Shopper" />
       <p className="text-roxo-primario text-[1.8rem] text-center">
         Você deseja alterar o padrão de sacola. Aqui está!
@@ -15,58 +16,83 @@ const ModalPadraoDeSacola = () => {
           Padrão de Sacola
         </p>
       </div>
-      <form className="flex justify-center ">
+      <form className="flex justify-center items-center flex-col gap-[1.8rem]">
         <label
           htmlFor="iva"
-          className="border-roxo-primario border-[.2rem] w-[100] h-[4rem] rounded-[10rem]"
+          className="border-roxo-primario border-[.2rem] w-[80%] h-[4rem] rounded-[10rem] flex justify-between items-center text-[1.8rem] text-roxo-primario font-semibold  px-[1rem]"
         >
+          IVA
           <input
             type="number"
             id="iva"
-            className="bg-transparent w-[100] h-[4rem] focus:outline-lime-500 focus:outline-[.2rem] focus:rounded-full focus:bg-transparent"
+            min="0"
+            defaultValue="0"
+            className="bg-transparent text-[1.8rem] text-roxo-primario w-[85%] h-[4rem] focus:outline-none text-end "
           />
         </label>
         <label
-          htmlFor="iva"
-          className="border-roxo-primario border-[.2rem] w-[100] h-[4rem] rounded-[10rem]"
+          htmlFor="peso"
+          className="border-roxo-primario border-[.2rem] w-[80%] h-[4rem] rounded-[10rem] flex justify-between items-center text-[1.8rem] text-roxo-primario font-semibold  px-[1rem]"
         >
+          Peso
           <input
             type="number"
-            id="iva"
-            className="bg-transparent w-[100] h-[4rem] focus:outline-lime-500 focus:outline-[.2rem] focus:rounded-full focus:bg-transparent"
+            id="peso"
+            min="0"
+            defaultValue="200"
+            className="bg-transparent text-[1.8rem] text-roxo-primario w-[85%] h-[4rem] focus:outline-none text-end "
           />
+          g
         </label>
         <label
-          htmlFor="iva"
-          className="border-roxo-primario border-[.2rem] w-[100] h-[4rem] rounded-[10rem]"
+          htmlFor="altura"
+          className="border-roxo-primario border-[.2rem] w-[80%] h-[4rem] rounded-[10rem] flex justify-between items-center text-[1.8rem] text-roxo-primario font-semibold  px-[1rem]"
         >
+          Altura
           <input
             type="number"
-            id="iva"
-            className="bg-transparent w-[100] h-[4rem] focus:outline-lime-500 focus:outline-[.2rem] focus:rounded-full focus:bg-transparent"
+            id="altura"
+            min="0"
+            defaultValue="17"
+            className="bg-transparent text-[1.8rem] text-roxo-primario w-[85%] h-[4rem] focus:outline-none text-end "
           />
+          cm
         </label>
         <label
-          htmlFor="iva"
-          className="border-roxo-primario border-[.2rem] w-[100] h-[4rem] rounded-[10rem]"
+          htmlFor="largura"
+          className="border-roxo-primario border-[.2rem] w-[80%] h-[4rem] rounded-[10rem] flex justify-between items-center text-[1.8rem] text-roxo-primario font-semibold  px-[1rem]"
         >
+          Largura
           <input
             type="number"
-            id="iva"
-            className="bg-transparent w-[100] h-[4rem] focus:outline-lime-500 focus:outline-[.2rem] focus:rounded-full focus:bg-transparent"
+            id="largura"
+            min="0"
+            defaultValue="5"
+            className="bg-transparent text-[1.8rem] text-roxo-primario w-[85%] h-[4rem] focus:outline-none text-end "
           />
+          cm
         </label>
         <label
-          htmlFor="iva"
-          className="border-roxo-primario border-[.2rem] w-[100] h-[4rem] rounded-[10rem]"
+          htmlFor="comprimento"
+          className="border-roxo-primario border-[.2rem] w-[80%] h-[4rem] rounded-[10rem] flex justify-between items-center text-[1.8rem] text-roxo-primario font-semibold  px-[1rem]"
         >
+          Comprimento
           <input
             type="number"
-            id="iva"
-            className="bg-transparent w-[100] h-[4rem] focus:outline-lime-500 focus:outline-[.2rem] focus:rounded-full focus:bg-transparent"
+            id="comprimento"
+            min="0"
+            defaultValue="40"
+            className="bg-transparent text-[1.8rem] text-roxo-primario w-[85%] h-[4rem] focus:outline-none text-end "
           />
+          cm
         </label>
-        <button></button>
+
+        <button
+          className="p-[1.5rem] bg-roxo-primario rounded-full drop-shadow-md"
+          title="Enviar"
+        >
+          <HiOutlineArrowUpTray color="#FFFFFF" size="2.7rem" />
+        </button>
       </form>
     </div>
   );
