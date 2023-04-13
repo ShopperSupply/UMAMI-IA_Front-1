@@ -1,14 +1,9 @@
 import { NextPage } from "next";
 import Seo from "@/components/seo";
 import Menu from "@/components/menu";
-import { useState } from "react";
 import Modal from "@/components/modal";
-import { useModal } from "@/providers/modaisProvider";
 
 const Home: NextPage = () => {
- 
-  
-  
   return (
     <>
       <Seo
@@ -17,7 +12,7 @@ const Home: NextPage = () => {
       />
       <main className="bg-branco-secundario">
         <Menu />
-        
+        <Modal />
       </main>
     </>
   );
