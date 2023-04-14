@@ -1,78 +1,71 @@
 import Image from "next/image";
 import iconRobo from "../../../public/Icon_Robo.svg";
-import Select, { OptionTypeBase } from "react-select";
+import Select, { SingleValue } from "react-select";
+import OptionTypeBase from "react-select";
 import { useState } from "react";
+import { curadores, errosTypes, places } from "./db";
 
 const ModalEnvioErros = () => {
   // esse modal precisa receber um provider com um array com todos os curadores ativos, erros de QA, Cliente, Shopping, ABBR e Loja.
 
-  interface Icurador {
+  interface IoptionsEerrosTypes {
     id: number;
-    name: string;
-    level: number;
+    group: string;
+    title: string;
+    description: string;
+    severity: number;
+    collector: string;
+    label: string;
   }
-
-  interface Ioptions {
+  interface IoptionsCuradores {
     id: number;
     name: string;
     label: string;
   }
 
-  const curadores: Icurador[] = [
-    {
-      id: 1,
-      name: "Alex Lanção",
-      level: 2,
-    },
-    {
-      id: 2,
-      name: "Alonso",
-      level: 2,
-    },
-    {
-      id: 3,
-      name: "Raquel",
-      level: 2,
-    },
-    {
-      id: 4,
-      name: "Thais",
-      level: 2,
-    },
-    {
-      id: 5,
-      name: "Alex Lanção",
-      level: 2,
-    },
-    {
-      id: 6,
-      name: "Alonso",
-      level: 2,
-    },
-    {
-      id: 7,
-      name: "Raquel",
-      level: 2,
-    },
-    {
-      id: 8,
-      name: "Thais",
-      level: 2,
-    },
-  ];
+  interface IoptionsPlaces {
+    id: string;
+    client: string;
+    mall: string;
+    abbr: string;
+    name: string;
+    is_active: boolean;
+    label: string;
+  }
 
-  const [selectedOption, setSelectedOption] = useState<object>();
+  const [selectedOptionState, setSelectedOptionState] = useState<
+    IoptionsEerrosTypes[] | IoptionsCuradores[] | IoptionsPlaces[] | null
+  >([]);
 
-  const options: Ioptions[] = curadores.map((curador: Icurador) => ({
-    id: curador.id,
-    name: curador.name,
+  // Funções responsaveis com formatar o objeto e adicionar o campo label.
+  const optionsCuradores: IoptionsCuradores[] = curadores.map((curador) => ({
+    ...curador,
     label: curador.name,
   }));
 
-  const handleChange = (selectedOption: OptionTypeBase) => {
-    setSelectedOption(selectedOption);
-  };
+  const optionsPlacesCliente: IoptionsPlaces[] = places.map((place) => ({
+    ...place,
+    label: place.client,
+  }));
+   const optionsPlacesProject: IoptionsPlaces[] = places.map((place) => ({
+     ...place,
+     label: place.abbr,
+   }))
 
+  const optionsErrosTypes: IoptionsEerrosTypes[] = errosTypes.map((error) => ({
+    ...error,
+    label: `${error.group} | ${error.title}`,
+  }));
+
+  const handleChange = (
+    selectedOption: SingleValue<
+      IoptionsEerrosTypes | IoptionsCuradores | IoptionsPlaces
+    >
+  ) => {
+    setSelectedOptionState(banana => [...banana, selectedOption]);
+    return true;
+  };
+  console.log(selectedOptionState);
   return (
     <div className="flex flex-col justify-center items-center gap-[3rem] w-[25%] h-screen bg-branco-primario drop-shadow-md">
       <Image src={iconRobo} alt="Incone robô de qualidade Shopper" />
@@ -81,30 +74,47 @@ const ModalEnvioErros = () => {
         informações estão corretas.
       </p>
       <form className="flex flex-col justify-center items-center w-[85%]">
-        {/* <select className="text-[1.8rem] w-[100%] h-[4rem] rounded-full px-[1rem] border-roxo-primario border-[.2rem] focus:outline-none text-roxo-primario">
-            <option value="defult" >Curador responsavel</option>
-          {curadores.map((curador, index) => (
-            <option key={index} className="text-[1.8rem]">
-              {curador.name}
-            </option>
-          ))}
-        </select> */}
         <Select
-          options={options}
+          options={optionsCuradores}
           onChange={handleChange}
-          className="w-[100%] rounded-full border-roxo-primario border-[.2rem] h-[4rem] text-[1.8rem] text-roxo-primario "
+          className="w-[100%] rounded-full border-roxo-primario border-[.2rem] h-[4rem] text-[1.8rem] text-roxo-primario before:border-none after:border-none hover:none"
+          styles={{
+            control: (baseStyles, state) => ({
+              ...baseStyles,
+              background: "transparent",
+              border: 0,
+              boxShadow: "none",
+            }),
+          }}
+        />
+        <Select
+          options={optionsErrosTypes}
+          onChange={handleChange}
+          className="w-[100%] rounded-full border-roxo-primario border-[.2rem] h-[4rem] text-[1.8rem] text-roxo-primario before:border-none after:border-none hover:none"
           styles={{
             control: (baseStyles, state) => ({
               ...baseStyles,
               background: "none",
-              borderColor: state.isFocused ? "transparent" : "transparent",
-              outlineColor:
-                state.isFocused || state.
-                  ? "transparent"
-                  : "transparent",
+              border: 0,
+              boxShadow: "none",
             }),
           }}
         />
+        <fieldset>
+          <Select
+            options={optionsPlacesCliente}
+            onChange={handleChange}
+            className="w-[100%] rounded-full border-roxo-primario border-[.2rem] h-[4rem] text-[1.8rem] text-roxo-primario before:border-none after:border-none hover:none"
+            styles={{
+              control: (baseStyles, state) => ({
+                ...baseStyles,
+                background: "none",
+                border: 0,
+                boxShadow: "none",
+              }),
+            }}
+          />
+        </fieldset>
       </form>
     </div>
   );
