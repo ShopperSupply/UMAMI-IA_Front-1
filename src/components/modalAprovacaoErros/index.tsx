@@ -2,21 +2,24 @@ import Image from "next/image";
 import iconRobo from "../../../public/Icon_Robo.svg";
 import { HiCheck, HiDownload, HiPlus, HiOutlineTrash } from "react-icons/hi";
 import { HiArrowUturnLeft } from "react-icons/hi2";
-import { errors } from "./db";
+import { useData } from "@/providers/dataProvider";
 import { useModal } from "@/providers/modaisProvider";
 
 const ModalAprovacaoErros = () => {
+  const { errors, addError } = useData();
+  let severity = errors.
   return (
-    <div
-      className={`flex flex-row-reverse ${!errors && "hidden"}`}
-    >
+    <div className={`flex flex-row-reverse ${!errors && "hidden"}`}>
       <div className=" flex flex-col justify-center items-center w-[25%] h-screen bg-branco-primario drop-shadow-md">
         <div className="overflow-y-auto flex flex-col w-[100%] text-roxo-primario text-[1.2rem] font-semibold">
-          {errors?.map((erro, i) => {
+          {errors?.map((error, i) => {
             return (
-              <div className="flex justify-between items-center bg-branco-secundario p-5 my-2 mx-4 rounded-md" key={i}>
+              <div
+                className="flex justify-between items-center bg-branco-secundario p-5 my-2 mx-4 rounded-md"
+                key={i}
+              >
                 <div
-                  className={`rounded-full shadow-inner bg-severity-${erro.error_type.severity} w-[2.3rem] h-[2.3rem]`}
+                  className={`rounded-full shadow-inner bg-severity-${error.} w-[2.3rem] h-[2.3rem]`}
                   title={`Erro de relevancia ${erro.error_type.severity}`}
                 ></div>
                 <div className="text-center">
@@ -24,7 +27,7 @@ const ModalAprovacaoErros = () => {
                   <p>{erro.coor}</p>
                 </div>
                 <p className="w-[60%] text-center">{erro.error_type.title}</p>
-                <HiOutlineTrash size="2rem" className="cursor-pointer"/>
+                <HiOutlineTrash size="2rem" className="cursor-pointer" />
               </div>
             );
           })}

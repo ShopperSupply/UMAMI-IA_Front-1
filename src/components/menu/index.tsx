@@ -12,6 +12,7 @@ import {
 import { IoMdAddCircle } from "react-icons/io";
 import Logo_Shopper from "../../../public/Logo_Shopper.svg";
 import { useModal } from "@/providers/modaisProvider";
+import ModalPadraoDeSacola from "../modalPadraoDeSacola";
 
 const Menu = () => {
   const { setContent, showModal, reverseModal } = useModal();
@@ -62,7 +63,10 @@ const Menu = () => {
             <HiOutlineSaveAs color="#5F4B8B" size="2.5rem" />
             Comparação
           </li>
-          <li className="flex items-center gap-[1rem] ml-[2.2rem] cursor-pointer">
+          <li onClick={()=> {
+            setContent(<ModalPadraoDeSacola/>)
+            showModal()
+            }} className="flex items-center gap-[1rem] ml-[2.2rem] cursor-pointer">
             <HiOutlineShoppingBag color="#5F4B8B" size="2.5rem" />
             Padrão de Sacola
           </li>
