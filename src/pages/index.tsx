@@ -2,6 +2,7 @@ import { NextPage } from "next";
 import Seo from "@/components/seo";
 import Menu from "@/components/menu";
 import Modal from "@/components/modal";
+import ModalAprovacaoErros from "@/components/modalAprovacaoErros";
 
 const Home: NextPage = () => {
   return (
@@ -13,6 +14,7 @@ const Home: NextPage = () => {
       <main className="bg-branco-secundario">
         <Menu />
         <Modal />
+        <ModalAprovacaoErros />
       </main>
     </>
   );
