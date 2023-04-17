@@ -4,16 +4,16 @@ interface Icurador {
   level: number;
 }
 
-interface IerrosTypes {
-  id: number;
-  group: string;
-  title: string;
-  description: string;
-  severity: number;
-  collector: string;
+export interface IerrosTypes {
+  id?: number;
+  group?: string;
+  title?: string;
+  description?: string;
+  severity?: number;
+  collector?: string;
 }
 
-interface Iplaces {
+export interface Iplaces {
   id: string;
   client: string;
   mall: string;
@@ -150,7 +150,7 @@ export const curadores: Icurador[] = [
 
 export const places: Iplaces[] = [
   {
-    id: "268dnus484nds",
+    id: "268dnus484nd",
     client: "Also",
     mall: "Grande Rio",
     abbr: "RJ4",
@@ -158,7 +158,7 @@ export const places: Iplaces[] = [
     is_active: true,
   },
   {
-    id: "268dnus484nds",
+    id: "268dnus484n",
     client: "ElDourado",
     mall: "Curitiba mall",
     abbr: "PDP",
@@ -166,7 +166,7 @@ export const places: Iplaces[] = [
     is_active: true,
   },
   {
-    id: "268dnus484nds",
+    id: "268dnus484",
     client: "Also",
     mall: "Caxias",
     abbr: "RJ4",
@@ -174,7 +174,7 @@ export const places: Iplaces[] = [
     is_active: true,
   },
   {
-    id: "268dnus484nds",
+    id: "268dnus48",
     client: "Also",
     mall: "Shopping da Bahia",
     abbr: "SDB",
