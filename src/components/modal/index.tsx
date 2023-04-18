@@ -14,7 +14,7 @@ const Modal = () => {
       {content}
       <div
         onClick={hideModal}
-        className={`h-screen w-${errors ? "3/4" : "2/4"} backdrop-blur-sm bg-black bg-opacity-20 z-0`}
+        className={`h-screen w-${!errors ? "3/4" : "2/4"} backdrop-blur-sm bg-black bg-opacity-20 z-0`}
       ></div>
     </div>
   );
