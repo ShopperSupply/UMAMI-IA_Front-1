@@ -1,93 +1,156 @@
 import Image from "next/image";
 import iconRobo from "../../../public/Icon_Robo.svg";
-import Select, { SingleValue } from "react-select";
-import OptionTypeBase from "react-select";
-import { useState } from "react";
-import { curadores, errosTypes, places } from "./db";
+import { IerrosTypes, Iplaces, curadores, errosTypes, places } from "./db";
+import { HiArrowCircleUp, HiXCircle } from "react-icons/hi";
+
 
 const ModalEnvioErros = () => {
-  // esse modal precisa receber um provider com um array com todos os curadores ativos, erros de QA, Cliente, Shopping, ABBR e Loja.
-
-  const [curatorValue, setCuratorValue] = useState("");
-
-  const onChange = (event : any) => {
-    setCuratorValue(event.target.value);
-  };
-
-  const onClick = (event: any) => {
-    setCuratorValue(event)
-  }
-
-  // Funções responsaveis com formatar o objeto e adicionar o campo label.
- 
   return (
-    <div className="flex flex-col justify-center items-center gap-[3rem] w-[25%] h-screen bg-branco-primario drop-shadow-md">
+    <div className="flex flex-col justify-center items-center gap-[3rem] w-[25%] h-screen bg-branco-primario drop-shadow-md px-5">
       <Image src={iconRobo} alt="Incone robô de qualidade Shopper" />
       <p className="text-roxo-primario text-[1.8rem] text-center">
         Aqui você pode cadastrar um ou mais erros, tenha certeza de que todas as
         informações estão corretas.
       </p>
-      <form className="flex flex-col justify-center items-center w-[85%]">
-        <div>
+      <form className="flex flex-col justify-center items-center w-[90%] gap-4">
+        <label className="w-[100%]">
           <input
-            type="text"
-            value={curatorValue}
-            onChange={onChange}
+            list="curatores"
+            placeholder="Alex Lanção"
+            title="Curador"
             className="w-[100%] rounded-full border-roxo-primario px-[1rem] border-[.2rem] h-[4rem] text-[1.8rem] text-roxo-primario focus:border-roxo-primario focus:outline-none"
           />
-          <div
-            className={`${
-              curatorValue ? "border-[.2rem] border-roxo-primario" : " "
-            } transition-transform rounded-lg mt-[.5rem] drop-shadow-lg z-10 absolute w-[80%]`}
-          >
-            {curadores
-              .filter((curador) => {
-                const searchTerm = curatorValue.toLocaleLowerCase();
-                const fullname = curador.name.toLowerCase();
+          <datalist id="curatores">
+            {curadores.map((curador) => {
+              return <option key={curador.id} value={curador.name} />;
+            })}
+          </datalist>
+        </label>
 
-                return searchTerm && fullname.startsWith(searchTerm);
-              })
-              .map((curador) => (
-                <div
-                  key={curador.id}
-                  onClick={() => onClick(curador.name)}
-                  className="relative text-[1.8rem]  px-[1rem] text-roxo-primario hover:bg-roxo-primario hover:text-branco-primario cursor-pointer"
-                >
-                  {curador.name}
-                </div>
-              ))}
-          </div>
+        <label className="w-[100%]">
+          <input
+            list="errorTypes"
+            placeholder="CODIGO | Codigo Fora do padrão"
+            title="Erro cometido"
+            className="w-[100%] rounded-full border-roxo-primario px-[1rem] border-[.2rem] h-[4rem] text-[1.8rem] text-roxo-primario focus:border-roxo-primario focus:outline-none"
+          />
+          <datalist id="errorTypes">
+            {errosTypes.map((error) => {
+              return (
+                <option
+                  key={error.id}
+                  value={`${error.group} | ${error.title}`}
+                />
+              );
+            })}
+          </datalist>
+        </label>
+        <div className="flex w-[100%] gap-2">
+          <input
+            placeholder="A8"
+            title="Coordenada onde o erro foi encontrado"
+            className="text-center w-[45%] rounded-full border-roxo-primario px-[1rem] border-[.2rem] h-[4rem] text-[1.8rem] text-roxo-primario focus:border-roxo-primario focus:outline-none"
+          />
+          <label className="w-[100%]">
+            <input
+              list="sheet"
+              placeholder="SKU"
+              title="Pagina onde o erro foi encontrado"
+              className=" text-center w-[100%] rounded-full border-roxo-primario px-[1rem] border-[.2rem] h-[4rem] text-[1.8rem] text-roxo-primario focus:border-roxo-primario focus:outline-none"
+            />
+            <datalist id="sheet">
+              <option value="SKU">Skus</option>
+              <option value="PROD">Produto</option>
+              <option value="ESPT">Especificações</option>
+            </datalist>
+          </label>
         </div>
+        <fieldset className="flex flex-col gap-4 mt-10">
+          <div className="flex w-[100%] gap-2">
+            <input
+              list="client"
+              placeholder="ALSO"
+              title="Cliente"
+              className="text-center w-[100%] rounded-full border-roxo-primario px-[1rem] border-[.2rem] h-[4rem] text-[1.8rem] text-roxo-primario focus:border-roxo-primario focus:outline-none"
+            />
+            <datalist id="client">
+              {places
+                .reduce((clientesUnicos: any, item) => {
+                  if (!clientesUnicos.includes(item.client)) {
+                    clientesUnicos.push(item.client);
+                  }
+                  return clientesUnicos;
+                }, [])
+                .map((place: string, index: number) => {
+                  return <option key={index} value={place} />;
+                })}
+            </datalist>
+            <input
+              list="abbr"
+              placeholder="SDB"
+              title="Abreviação do projeto"
+              className="text-center w-[50%] rounded-full border-roxo-primario px-[1rem] border-[.2rem] h-[4rem] text-[1.8rem] text-roxo-primario focus:border-roxo-primario focus:outline-none"
+            />
+            <datalist id="abbr">
+              {places
+                .reduce((clientesUnicos: any, item) => {
+                  if (!clientesUnicos.includes(item.abbr)) {
+                    clientesUnicos.push(item.abbr);
+                  }
+                  return clientesUnicos;
+                }, [])
+                .map((place: string, index: number) => {
+                  return <option key={index} value={place} />;
+                })}
+            </datalist>
+          </div>
+          <div className="flex felx-col w-[100%] gap-2">
+            <input
+              list="mall"
+              placeholder="Shopping da Bahia"
+              title="Shopping"
+              className="text-center w-[100%] rounded-full border-roxo-primario px-[1rem] border-[.2rem] h-[4rem] text-[1.8rem] text-roxo-primario focus:border-roxo-primario focus:outline-none"
+            />
+            <datalist id="mall">
+              {places
+                .reduce((clientesUnicos: any, item) => {
+                  if (!clientesUnicos.includes(item.mall)) {
+                    clientesUnicos.push(item.mall);
+                  }
+                  return clientesUnicos;
+                }, [])
+                .map((place: string, index: number) => {
+                  return <option key={index} value={place} />;
+                })}
+            </datalist>
+            <input
+              list="place"
+              placeholder="Ri Happy"
+              title="Loja"
+              className="text-center w-[100%] rounded-full border-roxo-primario px-[1rem] border-[.2rem] h-[4rem] text-[1.8rem] text-roxo-primario focus:border-roxo-primario focus:outline-none"
+            />
+            <datalist id="place">
+              {places
+                .reduce((clientesUnicos: any, item) => {
+                  if (!clientesUnicos.includes(item.name)) {
+                    clientesUnicos.push(item.name);
+                  }
+                  return clientesUnicos;
+                }, [])
+                .map((place: string, index: number) => {
+                  return <option key={index} value={place} />;
+                })}
+            </datalist>
+          </div>
+        </fieldset>
 
         <div>
-          <input
-            type="text"
-            value={curatorValue}
-            onChange={onChange}
-            className="w-[100%] rounded-full border-roxo-primario px-[1rem] border-[.2rem] h-[4rem] text-[1.8rem] text-roxo-primario focus:border-roxo-primario focus:outline-none"
-          />
-          <div
-            className={`${
-              curatorValue ? "border-[.2rem] border-roxo-primario" : " "
-            } transition-transform rounded-lg mt-[.5rem] drop-shadow-lg z-10 absolute w-[80%]`}
-          >
-            {curadores
-              .filter((curador) => {
-                const searchTerm = curatorValue.toLocaleLowerCase();
-                const fullname = curador.name.toLowerCase();
-
-                return searchTerm && fullname.startsWith(searchTerm);
-              })
-              .map((curador) => (
-                <div
-                  key={curador.id}
-                  onClick={() => onClick(curador.name)}
-                  className="relative text-[1.8rem]  px-[1rem] bg-white text-roxo-primario hover:bg-roxo-primario hover:text-branco-primario cursor-pointer"
-                >
-                  {curador.name}
-                </div>
-              ))}
-          </div>
+          <button type="submit" title="Enviar" className="pt-16 drop-shadow-md">
+            <HiArrowCircleUp color="#5F4B8B" size="7rem" />
+          </button>
+          <button title="Fechar" className="pt-16 drop-shadow-md">
+            <HiXCircle color="#5F4B8B" size="7rem" />
+          </button>
         </div>
       </form>
     </div>
