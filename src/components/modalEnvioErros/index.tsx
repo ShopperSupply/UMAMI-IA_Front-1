@@ -1,10 +1,11 @@
 import Image from "next/image";
 import iconRobo from "../../../public/Icon_Robo.svg";
-import { IerrosTypes, Iplaces, curadores, errosTypes, places } from "./db";
+import { useData } from "@/providers/dataProvider";
 import { HiArrowCircleUp, HiXCircle } from "react-icons/hi";
 
 
 const ModalEnvioErros = () => {
+  const {curators, places, errors, addError} =useData() 
   return (
     <div className="flex flex-col justify-center items-center gap-[3rem] w-[25%] h-screen bg-branco-primario drop-shadow-md px-5">
       <Image src={iconRobo} alt="Incone robô de qualidade Shopper" />
@@ -21,8 +22,8 @@ const ModalEnvioErros = () => {
             className="w-[100%] rounded-full border-roxo-primario px-[1rem] border-[.2rem] h-[4rem] text-[1.8rem] text-roxo-primario focus:border-roxo-primario focus:outline-none"
           />
           <datalist id="curatores">
-            {curadores.map((curador) => {
-              return <option key={curador.id} value={curador.name} />;
+            {curators.map((curator) => {
+              return <option key={curator.id} value={curator.name} />;
             })}
           </datalist>
         </label>
@@ -35,11 +36,11 @@ const ModalEnvioErros = () => {
             className="w-[100%] rounded-full border-roxo-primario px-[1rem] border-[.2rem] h-[4rem] text-[1.8rem] text-roxo-primario focus:border-roxo-primario focus:outline-none"
           />
           <datalist id="errorTypes">
-            {errosTypes.map((error) => {
+            {errors.map((error) => {
               return (
                 <option
-                  key={error.id}
-                  value={`${error.group} | ${error.title}`}
+                  key={error.error_type?.id}
+                  value={`${error.error_type?.group} | ${error.error_type?.title}`}
                 />
               );
             })}
