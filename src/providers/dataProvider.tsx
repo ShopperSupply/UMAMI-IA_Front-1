@@ -1,92 +1,51 @@
 import { createContext, useContext, useState } from "react";
+import {IErrorResponse} from "../interfaces/errors"
+import { ICurator } from "../interfaces/people"; 
+import { IPlace } from "../interfaces/place"; 
 
-interface IdataProvider {
+interface IDataProvider {
   children: React.ReactNode;
 }
+interface IDataContext {
+  errors: IErrorResponse[]
+  addError: (newError: IDataProvider) => void;
 
-interface IdataContext {
-  errors: [
-    error_type: {
-      id: number;
-      group: string;
-      title: string;
-      description: string;
-      severity: number;
-      collector: string;
-    },
-    coor: string,
-    sheet: string
-  ];
-  addError: {
-    error_type: {
-      id: number;
-      group: string;
-      title: string;
-      description: string;
-      severity: number;
-      collector: string;
-    };
-    coor: string;
-    sheet: string;
-  };
+  curators: ICurator[],
+
+  places: IPlace[],
 }
 
-const dataContext = createContext<IdataContext>({
-  errors: [],
-  addError: {
-    error_type: {
-      id: 0,
-      group: "",
-      title: "",
-      description: "",
-      severity: 0,
-      collector: "",
-    },
-    coor: "",
-    sheet: "",
-  },
+const DataContext = createContext<IDataContext>({
+  errors: [{}],
+  addError: () => {},
+
+  curators: [{}],
+  places: [{}]
 });
 
-export const DataProvider = ({ children }: IdataProvider) => {
+export const DataProvider = ({ children }: IDataProvider) => {
   const [errors, setErrors] = useState([{}]);
+  const [curators, setCurators] = useState([{}])
+  const [places, setPlace] = useState([{}])
 
-  const addError = (newError: IdataProvider) => {
+  const addError = (newError: IDataProvider) => {
     setErrors([...errors, newError]);
   };
 
   return (
-    // setContent é utilizado para definir qual componente deverar ser exibido quando o data for aberto.
-    <dataContext.Provider
+    <DataContext.Provider
       value={{
-        errors: {
-          error_type: {
-            id: 0,
-            group: "",
-            title: "",
-            description: "",
-            severity: 0,
-            collector: "",
-          },
-          coor: "",
-          sheet: "",
-        },
-        addError: {
-          error_type: {
-            id: 0,
-            group: "",
-            title: "",
-            description: "",
-            severity: 0,
-            collector: "",
-          },
-          coor: "",
-          sheet: "",
-        },
+        errors,
+        addError,
+
+        curators,
+
+        places
       }}
     >
       {children}
-    </dataContext.Provider>
+    </DataContext.Provider>
   );
 };
 
-export const useData = () => useContext(dataContext);
+export const useData = () => useContext(DataContext);
