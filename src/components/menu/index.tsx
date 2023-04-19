@@ -12,21 +12,14 @@ import {
 import { IoMdAddCircle } from "react-icons/io";
 import Logo_Shopper from "../../../public/Logo_Shopper.svg";
 import { useModal } from "@/providers/modaisProvider";
-import ModalEnvioPlanilha from "../modalEnvioPlanilha";
+import ModalPadraoDeSacola from "../modalPadraoDeSacola";
+import ModalEnvioErros from "../modalEnvioErros";
 
 const Menu = () => {
-  const { setContent, showModal } = useModal();
+  const { setContent, showModal, reverseModal } = useModal();
 
   return (
     <div className="flex flex-col justify-between fixed w-[21.2rem] h-screen drop-shadow-xl bg-branco-primario text-roxo-primario text-[1.8rem]">
-      <button
-        onClick={() => {
-          setContent(ModalEnvioPlanilha);
-          showModal();
-        }}
-      >
-        Planilha
-      </button>
       <div>
         <Image
           src={Logo_Shopper}
@@ -46,7 +39,12 @@ const Menu = () => {
             <HiOutlineKey color="#5F4B8B" size="2.5rem" />
             Permissoes
           </li>
-          <li className="flex items-center gap-[1rem] mx-[2.2rem] cursor-pointer">
+          <li onClick={() => {
+              setContent(<ModalEnvioErros />);
+              showModal();
+            }}
+            className="flex items-center gap-[1rem] mx-[2.2rem] cursor-pointer"
+          >
             <HiOutlineExclamationCircle color="#5F4B8B" size="2.5rem" />
             Erros
           </li>
@@ -71,7 +69,13 @@ const Menu = () => {
             <HiOutlineSaveAs color="#5F4B8B" size="2.5rem" />
             Comparação
           </li>
-          <li className="flex items-center gap-[1rem] ml-[2.2rem] cursor-pointer">
+          <li
+            onClick={() => {
+              setContent(<ModalPadraoDeSacola />);
+              showModal();
+            }}
+            className="flex items-center gap-[1rem] ml-[2.2rem] cursor-pointer"
+          >
             <HiOutlineShoppingBag color="#5F4B8B" size="2.5rem" />
             Padrão de Sacola
           </li>

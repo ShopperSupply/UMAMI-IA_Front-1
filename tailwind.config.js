@@ -12,6 +12,12 @@ module.exports = {
 
         "branco-primario": "#FFFFFF",
         "branco-secundario": "#F4F3F7",
+
+        "severity-1": "#EAFFB1",
+        "severity-2": "#BFE558",
+        "severity-3": "#FCFF53",
+        "severity-4": "#FB8B4B",
+        "severity-5": "#F83636",
       },
     },
   },
