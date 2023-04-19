@@ -6,14 +6,14 @@ import ModalEnvioErros from "../modalEnvioErros";
 
 
 const ModalAprovacaoErros = () => {
-  const { errors, addError } = useData();
+  const { errorsTypes, addError } = useData();
   const { showModal, setContent } = useModal();
 
   return (
-    <div className={`flex flex-row-reverse ${errors ? "hidden" : ""} `}>
+    <div className={`flex flex-row-reverse ${errorsTypes ? "hidden" : ""} `}>
       <div className=" flex flex-col justify-between items-center w-[25%] h-screen bg-branco-primario drop-shadow-md">
         <div className="overflow-y-auto flex flex-col w-[100%] text-roxo-primario text-[1.2rem] font-semibold">
-          {errors?.map((error, i) => {
+          {errorsTypes?.map((error, i) => {
             return (
               <div
                 className="flex justify-between items-center bg-branco-secundario p-5 my-2 mx-4 rounded-md"

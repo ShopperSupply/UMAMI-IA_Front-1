@@ -3,8 +3,9 @@ import { useModal } from "@/providers/modaisProvider";
 
 const Modal = () => {
   const { isReversed, isOpen, content, hideModal } = useModal();
-  const {errors, addError} = useData();
+  const {errorsTypes, addError} = useData();
 
+  console.log(errorsTypes)
   return (
     <div
       className={`flex flex-row${isReversed ? "-reverse" : ""} ${
@@ -14,7 +15,7 @@ const Modal = () => {
       {content}
       <div
         onClick={hideModal}
-        className={`h-screen w-${errors ? "3/4" : "2/4"} backdrop-blur-sm bg-black bg-opacity-20`}
+        className={`h-screen w-${errorsTypes ? "3/4" : "2/4"} backdrop-blur-sm bg-black bg-opacity-20`}
       ></div>
     </div>
   );

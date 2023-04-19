@@ -1,11 +1,23 @@
 import Image from "next/image";
 import iconRobo from "../../../public/Icon_Robo.svg";
+import { IInputs } from "@/interfaces/form";
 import { useData } from "@/providers/dataProvider";
 import { HiArrowCircleUp, HiXCircle } from "react-icons/hi";
-
+import { useForm, SubmitHandler } from "react-hook-form";
 
 const ModalEnvioErros = () => {
-  const {curators, places, errors, addError} =useData() 
+  const { curators, places, errorsTypes, addError } = useData();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors},
+  } = useForm<IInputs>();
+
+  console.log(watch("example"));
+
+  const onSubmit: SubmitHandler<IInputs> = (data) => console.log(data);
+
   return (
     <div className="flex flex-col justify-center items-center gap-[3rem] w-[25%] h-screen bg-branco-primario drop-shadow-md px-5">
       <Image src={iconRobo} alt="Incone robô de qualidade Shopper" />
@@ -13,14 +25,19 @@ const ModalEnvioErros = () => {
         Aqui você pode cadastrar um ou mais erros, tenha certeza de que todas as
         informações estão corretas.
       </p>
-      <form className="flex flex-col justify-center items-center w-[90%] gap-4">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex flex-col justify-center items-center w-[90%] gap-4"
+      >
         <label className="w-[100%]">
           <input
+            {...(register("exampleRequired"), { required: true })}
             list="curatores"
-            placeholder="Alex Lanção"
+            placeholder={errors.exampleRequired ? "Insira o curador responsavel" : "Alex Lanção"}
             title="Curador"
             className="w-[100%] rounded-full border-roxo-primario px-[1rem] border-[.2rem] h-[4rem] text-[1.8rem] text-roxo-primario focus:border-roxo-primario focus:outline-none"
           />
+          {errors.exampleRequired && <span>Insira o curador responsavel</span>}
           <datalist id="curatores">
             {curators.map((curator) => {
               return <option key={curator.id} value={curator.name} />;
@@ -36,7 +53,7 @@ const ModalEnvioErros = () => {
             className="w-[100%] rounded-full border-roxo-primario px-[1rem] border-[.2rem] h-[4rem] text-[1.8rem] text-roxo-primario focus:border-roxo-primario focus:outline-none"
           />
           <datalist id="errorTypes">
-            {errors.map((error) => {
+            {errorsTypes.map((error) => {
               return (
                 <option
                   key={error.error_type?.id}

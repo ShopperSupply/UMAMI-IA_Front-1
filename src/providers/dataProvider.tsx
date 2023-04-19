@@ -7,7 +7,7 @@ interface IDataProvider {
   children: React.ReactNode;
 }
 interface IDataContext {
-  errors: IErrorResponse[]
+  errorsTypes: IErrorResponse[]
   addError: (newError: IDataProvider) => void;
 
   curators: ICurator[],
@@ -16,7 +16,7 @@ interface IDataContext {
 }
 
 const DataContext = createContext<IDataContext>({
-  errors: [{}],
+  errorsTypes: [{}],
   addError: () => {},
 
   curators: [{}],
@@ -24,18 +24,18 @@ const DataContext = createContext<IDataContext>({
 });
 
 export const DataProvider = ({ children }: IDataProvider) => {
-  const [errors, setErrors] = useState([{}]);
+  const [errorsTypes, setErrors] = useState([{}]);
   const [curators, setCurators] = useState([{}])
   const [places, setPlace] = useState([{}])
 
   const addError = (newError: IDataProvider) => {
-    setErrors([...errors, newError]);
+    setErrors([...errorsTypes, newError]);
   };
 
   return (
     <DataContext.Provider
       value={{
-        errors,
+        errorsTypes,
         addError,
 
         curators,
