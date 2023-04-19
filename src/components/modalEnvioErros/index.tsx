@@ -1,13 +1,13 @@
 import Image from "next/image";
 import iconRobo from "../../../public/Icon_Robo.svg";
 import { IFormEnvioError } from "@/interfaces/form";
+import { IErrorLog } from "@/interfaces/errors";
 import { useData } from "@/providers/dataProvider";
+import { useModal } from "@/providers/modaisProvider";
 import { HiArrowCircleUp, HiXCircle } from "react-icons/hi";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useModal } from "@/providers/modaisProvider";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { IErrorLog } from "@/interfaces/errors";
 
 const ModalEnvioErros = () => {
   const { curators, places, errorsTypes, addError } = useData();

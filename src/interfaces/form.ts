@@ -9,3 +9,11 @@ export interface IFormEnvioError {
   mall: string;
   place: string;
 }
+
+export interface IFormBag {
+  iva?: number;
+  width?: number;
+  height?: number;
+  weight?: number;
+  length?: number;
+}
