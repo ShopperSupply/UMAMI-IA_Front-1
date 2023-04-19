@@ -22,6 +22,9 @@ interface IDataContext {
 
   currentBagPattern: IBag;
   setCurrentBagPattern: (bag: IBag) => void;
+
+  excelFile: File | null;
+  setExcelFile: React.Dispatch<React.SetStateAction<File | null>>;
 }
 
 const DataContext = createContext<IDataContext>({
@@ -47,7 +50,13 @@ const DataContext = createContext<IDataContext>({
   setCurrentPlace: () => {},
 
   currentBagPattern: {},
-  setCurrentBagPattern: () => {{}},
+  setCurrentBagPattern: () => {
+    {
+    }
+  },
+
+  excelFile: null,
+  setExcelFile: () => {},
 });
 
 export const DataProvider = ({ children }: IDataProvider) => {
@@ -65,6 +74,7 @@ export const DataProvider = ({ children }: IDataProvider) => {
     weight: 200,
     length: 40,
   });
+  const [excelFile, setExcelFile] = useState<File | null>(null);
 
   const addError = (newError: IErrorLog) => {
     setErrorsLog([...errorsLog, newError]);
@@ -87,6 +97,9 @@ export const DataProvider = ({ children }: IDataProvider) => {
 
         currentBagPattern,
         setCurrentBagPattern,
+
+        excelFile,
+        setExcelFile
       }}
     >
       {children}

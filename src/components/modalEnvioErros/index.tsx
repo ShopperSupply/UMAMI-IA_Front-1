@@ -177,7 +177,7 @@ const ModalEnvioErros = () => {
           className={`flex flex-col mt-10 ${errors ? "gap-2" : "gap-4"}`}
         >
           <div className="flex w-[100%] gap-2">
-            <div className="flex flex-col w-[70%]">
+            <label className="flex flex-col w-[70%]">
               <input
                 {...register("client")}
                 list="client"
@@ -206,8 +206,8 @@ const ModalEnvioErros = () => {
                     return <option key={index} value={place} />;
                   })}
               </datalist>
-            </div>
-            <div className="flex flex-col w-[50%]">
+            </label>
+            <label className="flex flex-col w-[50%]">
               <input
                 {...register("abbr")}
                 list="abbr"
@@ -234,10 +234,10 @@ const ModalEnvioErros = () => {
                     return <option key={index} value={place} />;
                   })}
               </datalist>
-            </div>
+            </label>
           </div>
           <div className="flex felx-col w-[100%] gap-2">
-            <div className="flex flex-col w-[50%]">
+            <label className="flex flex-col w-[50%]">
               <input
                 {...register("mall")}
                 list="mall"
@@ -264,8 +264,8 @@ const ModalEnvioErros = () => {
                     return <option key={index} value={place} />;
                   })}
               </datalist>
-            </div>
-            <div className="flex flex-col w-[50%]">
+            </label>
+            <label className="flex flex-col w-[50%]">
               <input
                 {...register("place")}
                 list="place"
@@ -294,7 +294,7 @@ const ModalEnvioErros = () => {
                     return <option key={index} value={place} />;
                   })}
               </datalist>
-            </div>
+            </label>
           </div>
         </fieldset>
 

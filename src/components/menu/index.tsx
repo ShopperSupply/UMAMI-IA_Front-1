@@ -14,9 +14,22 @@ import Logo_Shopper from "../../../public/Logo_Shopper.svg";
 import { useModal } from "@/providers/modaisProvider";
 import ModalPadraoDeSacola from "../modalPadraoDeSacola";
 import ModalEnvioErros from "../modalEnvioErros";
+import { useData } from "@/providers/dataProvider";
+import ModalEnvioPlanilha from "../modalEnvioPlanilha";
 
 const Menu = () => {
   const { setContent, showModal, reverseModal } = useModal();
+  const { setExcelFile } =useData()
+
+  const handleFileUpload = (event :  React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (file) {
+      setExcelFile(file)
+      setContent(<ModalEnvioPlanilha/>);
+      showModal();
+    }
+
+  }
 
   return (
     <div className="flex flex-col justify-between fixed w-[21.2rem] h-screen drop-shadow-xl bg-branco-primario text-roxo-primario text-[1.8rem]">
@@ -62,7 +75,7 @@ const Menu = () => {
             Arraste e soute ou clique, para enviar uma planilha para revisão.
           </p>
           <IoMdAddCircle color="#5F4B8B" size="3.5rem" />
-          <input id="dropzone-file" type="file" className="hidden" />
+          <input id="dropzone-file" type="file" className="hidden" onChange={handleFileUpload}/>
         </label>
         <ul className="flex flex-col gap-[2rem] ">
           <li className="flex items-center gap-[1rem] ml-[2.2rem] opacity-50 cursor-pointer">
