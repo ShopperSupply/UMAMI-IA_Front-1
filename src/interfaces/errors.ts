@@ -9,6 +9,12 @@ export interface IErrosTypes {
 	collector: string;
 }
 
+export interface IErrorLog { 
+	error_type?: IErrosTypes,
+	coor?: string,
+	sheet?: string,
+}
+
 export interface IErroLogBody {
 	curator_id: number;
 	error_type_id: number;
@@ -22,11 +28,5 @@ export interface IErroLogResponse {
 	error_type: IErrosTypes;
 	sku_error: string;
 	created_at: string;
-	
 }
 
-export interface IErrorResponse { 
-	error_type?: IErrosTypes,
-	coor?: string,
-	sheet?: string
-}
