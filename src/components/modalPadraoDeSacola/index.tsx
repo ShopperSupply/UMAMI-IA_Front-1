@@ -2,14 +2,17 @@ import Image from "next/image";
 import iconRobo from "../../../public/Icon_Robo.svg";
 import { IFormBag } from "@/interfaces/form";
 import { useData } from "@/providers/dataProvider";
+import { useModal } from "@/providers/modaisProvider";
 import { HiOutlineShoppingBag } from "react-icons/hi";
 import { HiOutlineArrowUpTray } from "react-icons/hi2";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { toast } from "react-hot-toast";
 
 const ModalPadraoDeSacola = () => {
-  const { setCurrentBagPattern } = useData();
+  const { currentBagPattern, setCurrentBagPattern } = useData();
+  const { hideModal } = useModal();
 
   const schema = yup.object().shape({
     iva: yup.number().required("Campo Obrigatorio"),
@@ -28,7 +31,18 @@ const ModalPadraoDeSacola = () => {
   });
 
   const onSubmit: SubmitHandler<IFormBag> = (data) => {
-    setCurrentBagPattern(data)
+    setCurrentBagPattern(data);
+    toast("PADRÃO DE SACOLA REDEFINIDO", {
+      icon: <Image src={iconRobo} alt="Supp" className="h-[3rem] w-[3rem]" />,
+      style: {
+        borderRadius: "50px",
+        background: "#F4F3F7",
+        color: "#3C2F58",
+        fontSize: "1.3rem",
+        fontWeight: "bolder",
+      },
+    });
+    hideModal();
   };
 
   return (
@@ -56,7 +70,7 @@ const ModalPadraoDeSacola = () => {
             type="number"
             id="iva"
             min="0"
-            defaultValue="0"
+            defaultValue={currentBagPattern.iva}
             {...register("iva")}
             className="bg-transparent text-[1.8rem] text-roxo-primario w-[85%] h-[4rem] focus:outline-none text-end "
           />
@@ -70,7 +84,7 @@ const ModalPadraoDeSacola = () => {
             type="number"
             id="peso"
             min="0"
-            defaultValue="200"
+            defaultValue={currentBagPattern.weight}
             {...register("weight")}
             className="bg-transparent text-[1.8rem] text-roxo-primario w-[85%] h-[4rem] focus:outline-none text-end "
           />
@@ -85,7 +99,7 @@ const ModalPadraoDeSacola = () => {
             type="number"
             id="altura"
             min="0"
-            defaultValue="17"
+            defaultValue={currentBagPattern.height}
             {...register("height")}
             className="bg-transparent text-[1.8rem] text-roxo-primario w-[85%] h-[4rem] focus:outline-none text-end "
           />
@@ -100,7 +114,7 @@ const ModalPadraoDeSacola = () => {
             type="number"
             id="largura"
             min="0"
-            defaultValue="5"
+            defaultValue={currentBagPattern.width}
             {...register("width")}
             className="bg-transparent text-[1.8rem] text-roxo-primario w-[85%] h-[4rem] focus:outline-none text-end "
           />
@@ -115,7 +129,7 @@ const ModalPadraoDeSacola = () => {
             type="number"
             id="comprimento"
             min="0"
-            defaultValue="40"
+            defaultValue={currentBagPattern.length}
             {...register("length")}
             className="bg-transparent text-[1.8rem] text-roxo-primario w-[85%] h-[4rem] focus:outline-none text-end "
           />

@@ -1,43 +1,45 @@
 import { createContext, useContext, useState } from "react";
-import {IErrosTypes, IErroLogBody, IErrorLog} from "../interfaces/errors"
-import { ICurator } from "../interfaces/people"; 
-import { IPlace } from "../interfaces/place"; 
+import { IErrosTypes, IErroLogBody, IErrorLog } from "../interfaces/errors";
+import { ICurator } from "../interfaces/people";
+import { IPlace } from "../interfaces/place";
 import { IBag } from "@/interfaces/bagpattern";
 
 interface IDataProvider {
   children: React.ReactNode;
 }
 interface IDataContext {
-  errorsTypes: IErrosTypes[]
-  errorsLog: IErrorLog[]
+  errorsTypes: IErrosTypes[];
+  errorsLog: IErrorLog[];
   addError: (newError: IErrorLog) => void;
 
-  curators: ICurator[]
-  currentCurator: ICurator
-  setCurrentCurator: (curator: ICurator) => void
+  curators: ICurator[];
+  currentCurator: ICurator;
+  setCurrentCurator: (curator: ICurator) => void;
 
-  places: IPlace[]
-  currentPlace: IPlace
-  setCurrentPlace: (place: IPlace) => void
+  places: IPlace[];
+  currentPlace: IPlace;
+  setCurrentPlace: (place: IPlace) => void;
 
-  currentBagPattern: IBag
-  setCurrentBagPattern: (bag: IBag) => void
+  currentBagPattern: IBag;
+  setCurrentBagPattern: (bag: IBag) => void;
 }
 
 const DataContext = createContext<IDataContext>({
-  errorsTypes: [{
-    id: 0,
-    group: "",
-    title: "",
-    description: "",
-    severity: 0,
-    collector: "",
-  }],
+  errorsTypes: [
+    {
+      id: 0,
+      group: "",
+      title: "",
+      description: "",
+      severity: 0,
+      collector: "",
+    },
+  ],
   errorsLog: [{}],
   addError: () => {},
 
   curators: [{}],
-  currentCurator : {},
+  currentCurator: {},
   setCurrentCurator: () => {},
 
   places: [{}],
@@ -45,8 +47,7 @@ const DataContext = createContext<IDataContext>({
   setCurrentPlace: () => {},
 
   currentBagPattern: {},
-  setCurrentBagPattern: () => {}
-
+  setCurrentBagPattern: () => {{}},
 });
 
 export const DataProvider = ({ children }: IDataProvider) => {
@@ -57,13 +58,17 @@ export const DataProvider = ({ children }: IDataProvider) => {
 
   const [currentCurator, setCurrentCurator] = useState({});
   const [currentPlace, setCurrentPlace] = useState({});
-  const [currentBagPattern, setCurrentBagPattern] = useState({});
+  const [currentBagPattern, setCurrentBagPattern] = useState<IBag>({
+    iva: 0,
+    width: 5,
+    height: 17,
+    weight: 200,
+    length: 40,
+  });
 
-    
   const addError = (newError: IErrorLog) => {
     setErrorsLog([...errorsLog, newError]);
   };
-
 
   return (
     <DataContext.Provider
@@ -81,7 +86,7 @@ export const DataProvider = ({ children }: IDataProvider) => {
         setCurrentPlace,
 
         currentBagPattern,
-        setCurrentBagPattern
+        setCurrentBagPattern,
       }}
     >
       {children}
