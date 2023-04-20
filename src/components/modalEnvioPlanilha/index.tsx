@@ -8,15 +8,16 @@ import { useData } from "@/providers/dataProvider";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import ConfirmAction from "../confirmAction";
 
 const ModalEnvioPlanilha = () => {
   const { curators, places, currentBagPattern, excelFile } = useData();
-  const { hideModal } = useModal();
+  const { hideModal, openAlert, isAlertOpen } = useModal();
   const [checked, setChecked] = useState<boolean>(false); //false = Manual e true = Sistêmico
+  const [statusPlace, setStatusPlace] = useState<boolean>(false);
 
   const schema = yup.object().shape({
     curator: yup.string().required("Campo Obrigatório"),
-    error_type: yup.string().required("Campo Obrigatório"),
     client: yup.string().required("Campo Obrigatório"),
     abbr: yup
       .string()
@@ -35,6 +36,7 @@ const ModalEnvioPlanilha = () => {
   });
 
   const onSubmit: SubmitHandler<IFormEnvioError> = (data) => {
+    console.log("onsubmit");
     const findCurator = () => {
       const curator = curators.find(
         (curador) => curador.name?.toLowerCase() == data.curator.toLowerCase()
@@ -56,10 +58,7 @@ const ModalEnvioPlanilha = () => {
     const place = findPlace();
 
     if (idCurator) {
-      if (!place) {
-        // if para verificar se um lugar exixte, caso contrario exixbir modal pedindo verificação dos dados inputados, se o QA responder true ele prossegue no envio da planilha
-        // caso contrario ele cancela a função de cadastro e exibe um toast reforçando a verificação .
-      } else {
+      const makeBody = () => {
         const body: IFormPlanilha = {
           bag_patterns: currentBagPattern,
           curator_id: idCurator,
@@ -72,7 +71,17 @@ const ModalEnvioPlanilha = () => {
           },
           spreadsheet: excelFile,
         };
-        console.log(body);
+        return body;
+      };
+
+      if (!place) {
+        // if para verificar se um lugar exixte, caso contrario exixbir modal pedindo verificação dos dados inputados, se o QA responder true ele prossegue no envio da planilha
+        // caso contrario ele cancela a função de cadastro e exibe um toast reforçando a verificação .
+        openAlert();
+        if (statusPlace) {
+          const body = makeBody();
+        } else {
+        }
       }
     } else {
       // toast caso o curador não exixtir
@@ -81,7 +90,15 @@ const ModalEnvioPlanilha = () => {
 
   return (
     <>
-      <div
+      {isAlertOpen && (
+        <ConfirmAction
+          message="O canal de venda informado, ainda não está cadastrado, deseja realizar um novo cadastro?"
+          setStatus={setStatusPlace}
+        />
+      )}
+
+      <form
+        onSubmit={handleSubmit(onSubmit)}
         className={`w-[25%] h-screen bg-branco-primario flex flex-col justify-around items-center z-10`}
       >
         <Image src={Icon_Robo} alt="Supp"></Image>
@@ -318,13 +335,12 @@ const ModalEnvioPlanilha = () => {
           /> */}
         </div>
         <button
-          type="submit"
           className="p-[1.5rem] bg-roxo-primario rounded-full drop-shadow-md"
           title="Enviar"
         >
           <HiOutlineArrowUpTray color="#FFFFFF" size="2.7rem" />
         </button>
-      </div>
+      </form>
     </>
   );
 };

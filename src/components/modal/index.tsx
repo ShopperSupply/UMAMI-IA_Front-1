@@ -8,9 +8,9 @@ const Modal = () => {
   console.log(errorsTypes)
   return (
     <div
-      className={`flex flex-row${isReversed ? "-reverse" : ""} ${
+      className={`flex flex-row absolute w-screen z-0 ${isReversed ? "-reverse" : ""} ${
         !isOpen ? "hidden" : ""
-      } transition`}
+      } transition `}
     >
       {content}
       <div

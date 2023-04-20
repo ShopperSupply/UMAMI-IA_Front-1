@@ -3,7 +3,6 @@ import Seo from "@/components/seo";
 import Menu from "@/components/menu";
 import Modal from "@/components/modal";
 import ModalAprovacaoErros from "@/components/modalAprovacaoErros";
-import ConfirmAction from "@/components/confirmAction";
 
 const Home: NextPage = () => {
   return (

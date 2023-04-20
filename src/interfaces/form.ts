@@ -29,4 +29,5 @@ export interface IFormPlanilha {
 
 export interface IConfirmAction {
   message: string;
+  setStatus: React.Dispatch<React.SetStateAction<boolean>>
 }

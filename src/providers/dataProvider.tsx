@@ -62,7 +62,11 @@ const DataContext = createContext<IDataContext>({
 export const DataProvider = ({ children }: IDataProvider) => {
   const [errorsTypes, setErrors] = useState([]);
   const [errorsLog, setErrorsLog] = useState([{}]);
-  const [curators, setCurators] = useState([{}]);
+  const [curators, setCurators] = useState([{
+    id: 5,
+    name: "Alex",
+    level: 1,
+  }]);
   const [places, setPlace] = useState([{}]);
 
   const [currentCurator, setCurrentCurator] = useState({});

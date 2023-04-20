@@ -12,6 +12,10 @@ interface IModalContext {
   showModal: () => void;
   reverseModal: () => void;
   setContent: React.Dispatch<React.SetStateAction<JSX.Element | undefined>>;
+
+  isAlertOpen: boolean;
+  openAlert: () => void;
+  closeAlert: () => void;
 }
 
 const ModalContext = createContext<IModalContext>({
@@ -21,12 +25,18 @@ const ModalContext = createContext<IModalContext>({
   showModal: () => {},
   reverseModal: () => {},
   setContent: () => {},
+
+  isAlertOpen: false,
+  openAlert: () => {},
+  closeAlert: () => {},
 });
 
 export const ModalProvider = ({ children }: IModalProvider) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [content, setContent] = useState<JSX.Element | undefined>(undefined);
   const [isReversed, setIsReversed] = useState<boolean>(false);
+
+  const [isAlertOpen, setIsAlertOpen] = useState<boolean>(false);
 
   function hideModal() {
     // Esconder o Modal ja aberto, essa função deve ser chamada para fechar um modal.
@@ -42,6 +52,13 @@ export const ModalProvider = ({ children }: IModalProvider) => {
     setIsReversed(!isReversed);
   }
 
+  function openAlert() {
+    setIsAlertOpen(true);
+  }
+  function closeAlert(){
+    setIsAlertOpen(false);
+  }
+
   return (
     // setContent é utilizado para definir qual componente deverar ser exibido quando o modal for aberto.
     <ModalContext.Provider
@@ -53,6 +70,10 @@ export const ModalProvider = ({ children }: IModalProvider) => {
         showModal,
         reverseModal,
         setContent,
+
+        isAlertOpen,
+        openAlert,
+        closeAlert
       }}
     >
       {children}
