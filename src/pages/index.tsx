@@ -16,7 +16,6 @@ const Home: NextPage = () => {
         <Menu />
         <Modal />
         <ModalAprovacaoErros />
-        <ConfirmAction message="O canal de venda informado, ainda não está cadastrado, deseja realizar um novo cadastro?" />
       </main>
     </>
   );

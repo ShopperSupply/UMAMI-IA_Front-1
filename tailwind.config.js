@@ -19,6 +19,21 @@ module.exports = {
         "severity-4": "#FB8B4B",
         "severity-5": "#F83636",
       },
+      keyframes: {
+        showPop: {
+          "0%": {
+            transform: "translateY(-150px)",
+            transform: "translateY(-150px)",
+          },
+          "100%": {
+            transform: "translateY(0)",
+            transform: "translateY(0)",
+          },
+        },
+      },
+      animation: {
+        showPopAnimation: "showPop 0.5s",
+      },
     },
   },
   plugins: [],

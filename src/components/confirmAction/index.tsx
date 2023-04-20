@@ -4,15 +4,25 @@ import { IConfirmAction } from "@/interfaces/form";
 
 const ConfirmAction = ({ message }: IConfirmAction) => {
   return (
-    <div className="bg-branco secundario">
-      <div>
-        <Image src={Icon_Robo} alt="Supp" />
-        <h4>Supp</h4>
-      </div>
-      <p>{message}</p>
-      <div>
-        <button>Sim</button>
-        <button>Não</button>
+    <div className="w-screen h-screen flex justify-center">
+      <div className="bg-branco-primario drop-shadow-md w-[23vw] absolute mt-[1rem] rounded-[10px] p-6 animate-showPopAnimation ease-in-out">
+        <div className="flex justify-start items-stat gap-5 mb-3">
+          <Image src={Icon_Robo} alt="Supp" className="h-[4rem] w-[4rem]" />
+          <h4 className=" text-roxo-secundario font-bold text-[1.8rem]">
+            Supp
+          </h4>
+        </div>
+        <p className="text-roxo-secundario font-semibold text-[1.5rem]">
+          {message}
+        </p>
+        <div className="flex justify-center gap-5 mt-4">
+          <button className="bg-severity-2 py-1 px-7 text-[1.5rem] font-semibold rounded-full shadow-inner drop-shadow-sm focus:outline-roxo-primario">
+            Sim
+          </button>
+          <button className="bg-severity-5 py-1 px-7 text-[1.5rem] font-semibold rounded-full text-branco-secundario shadow-inner drop-shadow-sm focus:outline-roxo-primario">
+            Não
+          </button>
+        </div>
       </div>
     </div>
   );
