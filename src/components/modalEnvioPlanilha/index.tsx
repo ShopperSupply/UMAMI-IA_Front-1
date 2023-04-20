@@ -1,16 +1,18 @@
-import { IFormEnvioError } from "@/interfaces/form";
+import Image from "next/image";
+import Icon_Robo from "../../../public/Icon_Robo.svg";
+import { HiOutlineShoppingBag, HiOutlineArrowUpTray } from "react-icons/hi2";
+import { IFormEnvioError, IFormPlanilha } from "@/interfaces/form";
+import { useState } from "react";
 import { useModal } from "@/providers/modaisProvider";
 import { useData } from "@/providers/dataProvider";
-import Icon_Robo from "../../../public/Icon_Robo.svg";
-import Image from "next/image";
-import { HiOutlineShoppingBag } from "react-icons/hi2";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
 const ModalEnvioPlanilha = () => {
-  const { curators, places, errorsTypes, addError } = useData();
+  const { curators, places, currentBagPattern, excelFile } = useData();
   const { hideModal } = useModal();
+  const [checked, setChecked] = useState<boolean>(false); //false = Manual e true = Sistêmico
 
   const schema = yup.object().shape({
     curator: yup.string().required("Campo Obrigatório"),
@@ -42,14 +44,39 @@ const ModalEnvioPlanilha = () => {
     };
     const idCurator = findCurator();
 
-    // if (errorType) {
-    //   const body: IErrorLog = {
-    //     error_type: errorType,
-    //     coor: data.coor,
-    //     sheet: data.sheet
-    //   }
+    const findPlace = () => {
+      const place = places.find(
+        (place) =>
+          place.name?.toLowerCase() == data.place.toLowerCase() &&
+          place.abbr?.toUpperCase() == data.abbr.toUpperCase()
+      );
 
-    //   addError(body)
+      return place;
+    };
+    const place = findPlace();
+
+    if (idCurator) {
+      if (!place) {
+        // if para verificar se um lugar exixte, caso contrario exixbir modal pedindo verificação dos dados inputados, se o QA responder true ele prossegue no envio da planilha
+        // caso contrario ele cancela a função de cadastro e exibe um toast reforçando a verificação .
+      } else {
+        const body: IFormPlanilha = {
+          bag_patterns: currentBagPattern,
+          curator_id: idCurator,
+          modality: checked ? "Sistemico" : "Manual",
+          place: {
+            client: data.client,
+            abbr: data.abbr,
+            mall: data.mall,
+            name: data.place,
+          },
+          spreadsheet: excelFile,
+        };
+        console.log(body);
+      }
+    } else {
+      // toast caso o curador não exixtir
+    }
   };
 
   return (
@@ -58,7 +85,7 @@ const ModalEnvioPlanilha = () => {
         className={`w-[25%] h-screen bg-branco-primario flex flex-col justify-around items-center z-10`}
       >
         <Image src={Icon_Robo} alt="Supp"></Image>
-        <p className="text-roxo-primario text-xl">
+        <p className="text-roxo-primario text-3xl text-center p-3">
           Preciso de mais informações antes de validar a planilha.
         </p>
         <div
@@ -212,34 +239,91 @@ const ModalEnvioPlanilha = () => {
             </label>
           </div>
         </div>
-        <div className="">
-          <div className="flex">
-            <HiOutlineShoppingBag color="#5F4B8B" />
-            <h2 className="text-lg text-roxo-primario font-semibold">
-              Padrão de Sacola
-            </h2>
+        <div className="w-[85%] items-center flex flex-col">
+          <div className="flex items-end gap-3">
+            <HiOutlineShoppingBag size="3rem" color="#5F4B8B" />
+            <h2 className="text-3xl text-roxo-primario">Padrão de Sacola</h2>
           </div>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-2 gap-2 w-[100%]">
             <div>
-              <p className="text-roxo-primario text-opacity-35">IVA</p>
-              <p className="text-roxo-primario text-opacity-35">Peso</p>
-              <p className="text-roxo-primario text-opacity-35">Altura</p>
-              <p className="text-roxo-primario text-opacity-35">Largura</p>
-              <p className="text-roxo-primario text-opacity-35">Comprimento</p>
+              <p className="text-roxo-primario text-opacity-35 text-3xl opacity-60">
+                IVA
+              </p>
+              <p className="text-roxo-primario text-opacity-35 text-3xl opacity-60">
+                Peso
+              </p>
+              <p className="text-roxo-primario text-opacity-35 text-3xl opacity-60">
+                Altura
+              </p>
+              <p className="text-roxo-primario text-opacity-35 text-3xl opacity-60">
+                Largura
+              </p>
+              <p className="text-roxo-primario text-opacity-35 text-3xl opacity-60">
+                Comprimento
+              </p>
             </div>
             <div>
-              <p className="text-roxo-primario text-opacity-35">IVA</p>
-              <p className="text-roxo-primario text-opacity-35">Peso</p>
-              <p className="text-roxo-primario text-opacity-35">Altura</p>
-              <p className="text-roxo-primario text-opacity-35">Largura</p>
-              <p className="text-roxo-primario text-opacity-35">Comprimento</p>
+              <p className="text-roxo-primario text-opacity-35 text-3xl text-right opacity-60">
+                {currentBagPattern.iva}
+              </p>
+              <p className="text-roxo-primario text-opacity-35 text-3xl text-right opacity-60">
+                {currentBagPattern.weight}g
+              </p>
+              <p className="text-roxo-primario text-opacity-35 text-3xl text-right opacity-60">
+                {currentBagPattern.height}cm
+              </p>
+              <p className="text-roxo-primario text-opacity-35 text-3xl text-right opacity-60">
+                {currentBagPattern.width}cm
+              </p>
+              <p className="text-roxo-primario text-opacity-35 text-3xl text-right opacity-60">
+                {currentBagPattern.length}cm
+              </p>
             </div>
           </div>
         </div>
-        <div className="flex items-center space-x-2 mt-2">
-          <div className="w-15 h-6 shadow-lg rounded">Manual</div>
-          <div className="w-15 h-6 bg-roxo-primario rounded">Sistemica</div>
+        <div
+          onClick={() => setChecked(!checked)}
+          className="flex items-center space-x-2 mt-2 drop-shadow-md rounded-full w-[80%] cursor-pointer  bg-branco-primario box-border"
+        >
+          <div
+            className={`px-[14%] py-[1rem] my-[0.1rem] ${
+              !checked ? "bg-roxo-primario" : "bg-branco-primario"
+            } rounded-full text-3xl box-border`}
+          >
+            <p
+              className={`text-3xl ${
+                checked ? "text-roxo-primario " : "text-branco-primario"
+              }`}
+            >
+              Manual
+            </p>
+          </div>
+          <div
+            className={`px-[14%] py-[1rem] my-[0.1rem] ${
+              !checked ? "bg-branco-primario" : "bg-roxo-primario"
+            } rounded-full box-border`}
+          >
+            <p
+              className={`text-3xl ${
+                checked ? "text-branco-primario" : "text-roxo-primario"
+              } `}
+            >
+              Sistêmico
+            </p>
+          </div>
+
+          {/* <input
+            type="checkbox"
+            className="cursor-pointer appearance-none w-[7rem] h-[4rem] focus:outline-none checked:bg-branco-primario bg-roxo-primario  rounded-full before:inline-block before:rounded-full before:bg-branco-primario before:h-[3.6rem] before:w-[3.6rem] checked:before:bg-roxo-primario checked:before:translate-x-[3rem] drop-shadow-md transition-all duration-500 before:ml-[.2rem] before:mt-[.2rem]"
+          /> */}
         </div>
+        <button
+          type="submit"
+          className="p-[1.5rem] bg-roxo-primario rounded-full drop-shadow-md"
+          title="Enviar"
+        >
+          <HiOutlineArrowUpTray color="#FFFFFF" size="2.7rem" />
+        </button>
       </div>
     </>
   );

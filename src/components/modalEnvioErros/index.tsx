@@ -4,10 +4,11 @@ import { IFormEnvioError } from "@/interfaces/form";
 import { IErrorLog } from "@/interfaces/errors";
 import { useData } from "@/providers/dataProvider";
 import { useModal } from "@/providers/modaisProvider";
-import { HiArrowCircleUp, HiXCircle } from "react-icons/hi";
+import { HiPlus, HiOutlineXMark } from "react-icons/hi2";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { toast } from "react-hot-toast";
 
 const ModalEnvioErros = () => {
   const { curators, places, errorsTypes, addError } = useData();
@@ -43,28 +44,42 @@ const ModalEnvioErros = () => {
 
   const onSubmit: SubmitHandler<IFormEnvioError> = (data) => {
     const findCurator = () => {
-      const curator = curators.find((curador) => curador.name?.toLowerCase() == data.curator.toLowerCase())
-      
-      return curator?.id
-    }
-    
-    const findErrorType = () => {
-      const errorType = errorsTypes.find((error) => data.error_type.toLowerCase().includes(error.title.toLowerCase()))
-      
-      return errorType
-    }
-    const idCurator = findCurator()
-    const errorType = findErrorType()
+      const curator = curators.find(
+        (curador) => curador.name?.toLowerCase() == data.curator.toLowerCase()
+      );
 
-  
-    if (errorType) {      
+      return curator?.id;
+    };
+
+    const findErrorType = () => {
+      const errorType = errorsTypes.find((error) =>
+        data.error_type.toLowerCase().includes(error.title.toLowerCase())
+      );
+
+      return errorType;
+    };
+    const idCurator = findCurator();
+    const errorType = findErrorType();
+
+    if (errorType) {
       const body: IErrorLog = {
         error_type: errorType,
         coor: data.coor,
-        sheet: data.sheet
-      }
+        sheet: data.sheet,
+      };
 
-      addError(body)
+      addError(body);
+
+      toast("ERRO ADICIONADO COM SUCESSO", {
+        icon: <Image src={iconRobo} alt="Supp" className="h-[3rem] w-[3rem]" />,
+        style: {
+          borderRadius: "50px",
+          background: "#F4F3F7",
+          color: "#3C2F58",
+          fontSize: "1.3rem",
+          fontWeight: "bolder",
+        },
+      });
     }
   };
 
@@ -298,24 +313,19 @@ const ModalEnvioErros = () => {
           </div>
         </fieldset>
 
-        <div>
+        <div className="mt-[5%] flex gap-3">
           <button
-            type="submit"
+            className="p-[1.5rem] bg-roxo-primario rounded-full drop-shadow-md"
             title="Enviar"
-            className="pt-16 drop-shadow-md"
-            
           >
-            <HiArrowCircleUp
-              color="#5F4B8B"
-              size="7rem"
-            />
+            <HiPlus color="#FFFFFF" size="3rem" />
           </button>
           <button
             onClick={hideModal}
-            title="Fechar"
-            className="pt-16 drop-shadow-md"
+            className="p-[1.5rem] bg-roxo-primario rounded-full drop-shadow-md"
+            title="Enviar"
           >
-            <HiXCircle color="#5F4B8B" size="7rem" />
+            <HiOutlineXMark color="#FFFFFF" size="3rem" />
           </button>
         </div>
       </form>
