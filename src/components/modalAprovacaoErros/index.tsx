@@ -10,7 +10,7 @@ const ModalAprovacaoErros = () => {
   const { showModal, setContent } = useModal();
 
   return (
-    <div className={`flex flex-row-reverse ${errorsLog ? "hidden" : ""} `}>
+    <div className={`flex flex-row-reverse ${errorsLog ? "hidden" : ""} animate-showModalAnimation absolute z-10`}>
       <div className=" flex flex-col justify-between items-center w-[25%] h-screen bg-branco-primario drop-shadow-md">
         <div className="overflow-y-auto flex flex-col w-[100%] text-roxo-primario text-[1.2rem] font-semibold">
           {errorsLog?.map((error, i) => {

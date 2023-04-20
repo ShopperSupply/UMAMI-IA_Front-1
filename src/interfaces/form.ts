@@ -31,3 +31,9 @@ export interface IConfirmAction {
   message: string;
   setStatus: React.Dispatch<React.SetStateAction<boolean>>
 }
+
+export interface IFormLogin {
+  username?: string;
+  email?: string;
+  password: string;
+}

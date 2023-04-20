@@ -31,7 +31,7 @@ const Login: NextPage = () => {
           <form className="w-[100%] pb-[50%] flex flex-col justify-around items-center gap-5">
             <input
               type="email"
-              placeholder="exemplo@mail.com"
+              placeholder="exemplo@mail.com or Lancao"
               className="w-[60%] rounded-full border-roxo-primario px-[1rem] border-[.2rem] h-[4rem] text-[1.8rem] text-roxo-primario focus:border-roxo-primario focus:outline-none"
             />
             <input

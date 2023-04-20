@@ -99,7 +99,7 @@ const ModalEnvioPlanilha = () => {
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className={`w-[25%] h-screen bg-branco-primario flex flex-col justify-around items-center z-10`}
+        className={`w-[25%] h-screen bg-branco-primario flex flex-col justify-around items-center animate-showModalAnimation absolute z-10`}
       >
         <Image src={Icon_Robo} alt="Supp"></Image>
         <p className="text-roxo-primario text-3xl text-center p-3">

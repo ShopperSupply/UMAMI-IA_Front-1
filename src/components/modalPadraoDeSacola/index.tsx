@@ -46,7 +46,7 @@ const ModalPadraoDeSacola = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center gap-[3rem] w-[25%] h-screen bg-branco-primario drop-shadow-md">
+    <div className="flex flex-col justify-center items-center gap-[3rem] w-[25%] h-screen bg-branco-primario drop-shadow-md animate-showModalAnimation absolute z-10">
       <Image src={iconRobo} alt="Incone robô de qualidade Shopper" />
       <p className="text-roxo-primario text-[1.8rem] text-center">
         Você deseja alterar o padrão de sacola. Aqui está!

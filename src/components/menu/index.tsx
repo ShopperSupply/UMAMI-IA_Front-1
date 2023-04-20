@@ -32,7 +32,7 @@ const Menu = () => {
   }
 
   return (
-    <div className="flex flex-col justify-between fixed w-[21.2rem] h-screen drop-shadow-xl bg-branco-primario text-roxo-primario text-[1.8rem]">
+    <div className="flex flex-col justify-between fixed w-[21.2rem] h-screen drop-shadow-xl bg-branco-primario text-roxo-primario text-[1.8rem] animate-showModalAnimation z-5">
       <div>
         <Image
           src={Logo_Shopper}
@@ -52,7 +52,8 @@ const Menu = () => {
             <HiOutlineKey color="#5F4B8B" size="2.5rem" />
             Permissoes
           </li>
-          <li onClick={() => {
+          <li
+            onClick={() => {
               setContent(<ModalEnvioErros />);
               showModal();
             }}
@@ -75,7 +76,12 @@ const Menu = () => {
             Arraste e soute ou clique, para enviar uma planilha para revisão.
           </p>
           <IoMdAddCircle color="#5F4B8B" size="3.5rem" />
-          <input id="dropzone-file" type="file" className="hidden" onChange={handleFileUpload}/>
+          <input
+            id="dropzone-file"
+            type="file"
+            className="hidden"
+            onChange={handleFileUpload}
+          />
         </label>
         <ul className="flex flex-col gap-[2rem] ">
           <li className="flex items-center gap-[1rem] ml-[2.2rem] opacity-50 cursor-pointer">

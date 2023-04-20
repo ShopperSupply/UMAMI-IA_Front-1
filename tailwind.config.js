@@ -30,9 +30,20 @@ module.exports = {
             transform: "translateY(0)",
           },
         },
+        showModal: {
+          "0%": {
+            transform: "translateX(-500px)",
+            transform: "translateX(-500px)",
+          },
+          "100%": {
+            transform: "translateX(0)",
+            transform: "translateX(0)",
+          },
+        },
       },
       animation: {
         showPopAnimation: "showPop 0.5s",
+        showModalAnimation: "showModal 1s",
       },
     },
   },
