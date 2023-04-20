@@ -3,8 +3,19 @@ import Seo from "@/components/seo";
 import Menu from "@/components/menu";
 import Modal from "@/components/modal";
 import ModalAprovacaoErros from "@/components/modalAprovacaoErros";
+import { useUser } from "@/providers/userProvider";
+import { useRouter } from "next/router";
 
 const Home: NextPage = () => {
+  const {auth} = useUser()
+  const router = useRouter()
+
+  if (!auth) {
+     if (typeof window !== "undefined") {
+       router.push("/login");
+     }
+  }
+
   return (
     <>
       <Seo

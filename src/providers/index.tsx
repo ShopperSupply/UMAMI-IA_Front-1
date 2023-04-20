@@ -1,5 +1,6 @@
 import { ModalProvider } from "./modaisProvider";
 import { DataProvider } from "./dataProvider";
+import { UserProvider } from "./userProvider";
 
 interface Providertypes {
   children: React.ReactNode;
@@ -7,9 +8,11 @@ interface Providertypes {
 
 const Providers = ({ children }: Providertypes) => {
   return (
-    <DataProvider>
-      <ModalProvider>{children}</ModalProvider>
-    </DataProvider>
+    <UserProvider>
+      <DataProvider>
+        <ModalProvider>{children}</ModalProvider>
+      </DataProvider>
+    </UserProvider>
   );
 };
 export default Providers;
