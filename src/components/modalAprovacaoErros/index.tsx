@@ -6,21 +6,22 @@ import ModalEnvioErros from "../modalEnvioErros";
 
 
 const ModalAprovacaoErros = () => {
-  const { errorsTypes, addError } = useData();
+  const { errorsLog, addError } = useData();
   const { showModal, setContent } = useModal();
 
   return (
-    <div className={`flex flex-row-reverse ${errorsTypes ? "hidden" : ""} `}>
+    <div className={`flex flex-row-reverse ${errorsLog ? "hidden" : ""} `}>
       <div className=" flex flex-col justify-between items-center w-[25%] h-screen bg-branco-primario drop-shadow-md">
         <div className="overflow-y-auto flex flex-col w-[100%] text-roxo-primario text-[1.2rem] font-semibold">
-          {errorsTypes?.map((error, i) => {
+          {errorsLog?.map((error, i) => {
+            const severityColor =`bg-severity-${error.error_type?.severity}`
             return (
               <div
                 className="flex justify-between items-center bg-branco-secundario p-5 my-2 mx-4 rounded-md"
                 key={i}
               >
                 <div
-                  className={`rounded-full shadow-inner bg-severity-${error.error_type?.severity} w-[2.3rem] h-[2.3rem]`}
+                  className={`rounded-full shadow-inner ${severityColor} w-[2.3rem] h-[2.3rem]`}
                   title={`Erro de relevancia ${error.error_type?.severity}`}
                 ></div>
                 <div className="text-center">
