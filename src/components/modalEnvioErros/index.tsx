@@ -11,7 +11,7 @@ import * as yup from "yup";
 import { toast } from "react-hot-toast";
 
 const ModalEnvioErros = () => {
-  const { curators, places, errorsTypes, addError } = useData();
+  const { curators, places, errorsTypes, errorsLog, addError, setCurrentCurator, setCurrentPlace} = useData();
   const { hideModal } = useModal();
 
   const schema = yup.object().shape({
@@ -43,23 +43,14 @@ const ModalEnvioErros = () => {
   });
 
   const onSubmit: SubmitHandler<IFormEnvioError> = (data) => {
-    const findCurator = () => {
       const curator = curators.find(
         (curador) => curador.name?.toLowerCase() == data.curator.toLowerCase()
       );
 
-      return curator?.id;
-    };
-
-    const findErrorType = () => {
       const errorType = errorsTypes.find((error) =>
         data.error_type.toLowerCase().includes(error.title.toLowerCase())
       );
 
-      return errorType;
-    };
-    const idCurator = findCurator();
-    const errorType = findErrorType();
 
     if (errorType) {
       const body: IErrorLog = {
@@ -67,7 +58,13 @@ const ModalEnvioErros = () => {
         coor: data.coor,
         sheet: data.sheet,
       };
-
+      
+    // if para deixar fixo o valor dos inputs
+    // if (errorsLog) {
+    //   setCurrentCurator(curator?.name)
+    //   setCurrentPlace()
+    // }  
+      
       addError(body);
 
       toast("ERRO ADICIONADO COM SUCESSO", {

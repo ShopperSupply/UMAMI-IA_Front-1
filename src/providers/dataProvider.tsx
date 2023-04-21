@@ -1,8 +1,10 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { IErrosTypes, IErroLogBody, IErrorLog } from "../interfaces/errors";
 import { ICurator } from "../interfaces/people";
 import { IPlace } from "../interfaces/place";
 import { IBag } from "@/interfaces/bagpattern";
+import { getCurators, getErrorTypes } from "@/services/get";
+import { useUser } from "./userProvider";
 
 interface IDataProvider {
   children: React.ReactNode;
@@ -60,13 +62,18 @@ const DataContext = createContext<IDataContext>({
 });
 
 export const DataProvider = ({ children }: IDataProvider) => {
-  const [errorsTypes, setErrors] = useState([]);
-  const [errorsLog, setErrorsLog] = useState([{}]);
-  const [curators, setCurators] = useState([{
-    id: 5,
-    name: "Alex",
-    level: 1,
-  }]);
+  const [errorsTypes, setErrors] = useState([
+    {
+      id: 0,
+      group: "",
+      title: "",
+      description: "",
+      severity: 0,
+      collector: "",
+    },
+  ]);
+  const [errorsLog, setErrorsLog] = useState<IErrorLog[]>([]);
+  const [curators, setCurators] = useState([{}]);
   const [places, setPlace] = useState([{}]);
 
   const [currentCurator, setCurrentCurator] = useState({});
@@ -79,6 +86,14 @@ export const DataProvider = ({ children }: IDataProvider) => {
     length: 40,
   });
   const [excelFile, setExcelFile] = useState<File | null>(null);
+  const {token, auth} = useUser()
+
+  useEffect(()=> {
+    if (auth){
+      getCurators(token || "", setCurators);
+      getErrorTypes(token || "", setErrors);
+    }
+  },[auth, token])
 
   const addError = (newError: IErrorLog) => {
     setErrorsLog([...errorsLog, newError]);

@@ -4,25 +4,43 @@ import { useData } from "@/providers/dataProvider";
 import { useModal } from "@/providers/modaisProvider";
 import ModalEnvioErros from "../modalEnvioErros";
 
-
 const ModalAprovacaoErros = () => {
   const { errorsLog, addError } = useData();
   const { showModal, setContent } = useModal();
 
+  const getColor = (severity: number | undefined) => {
+    switch (severity) {
+      case 1:
+        return "#EAFFB1";
+      case 2:
+        return "#BFE558";
+      case 3:
+        return "#FCFF53";
+      case 4:
+        return "#FB8B4B";
+      case 5: 
+        return "#F83635";        
+    }
+  };
+
   return (
-    <div className={`flex flex-row-reverse ${errorsLog ? "hidden" : ""} animate-showModalAnimation absolute z-10`}>
+    <div
+      className={`flex flex-row-reverse 
+      } animate-showModalAnimation z-10`}
+    style={errorsLog.length > 0 ? {visibility: "visible"} : {visibility: "hidden"} }
+    >
       <div className=" flex flex-col justify-between items-center w-[25%] h-screen bg-branco-primario drop-shadow-md">
         <div className="overflow-y-auto flex flex-col w-[100%] text-roxo-primario text-[1.2rem] font-semibold">
           {errorsLog?.map((error, i) => {
-            const severityColor =`bg-severity-${error.error_type?.severity}`
             return (
               <div
                 className="flex justify-between items-center bg-branco-secundario p-5 my-2 mx-4 rounded-md"
                 key={i}
               >
                 <div
-                  className={`rounded-full shadow-inner ${severityColor} w-[2.3rem] h-[2.3rem]`}
+                  className={`rounded-full shadow-inner w-[2.3rem] h-[2.3rem]`}
                   title={`Erro de relevancia ${error.error_type?.severity}`}
+                  style={{backgroundColor : getColor(error.error_type?.severity)}}
                 ></div>
                 <div className="text-center">
                   <p>{error.sheet}</p>
@@ -38,10 +56,13 @@ const ModalAprovacaoErros = () => {
           <div className="drop-shadow-md rounded-full font-bold bg-branco-primario text-roxo-primario p-4 cursor-pointer">
             <HiArrowUturnLeft size="2rem" fontWeight="900" />
           </div>
-          <div onClick={() => {
-            showModal();
-            setContent(ModalEnvioErros)
-          }} className="drop-shadow-md rounded-full bg-roxo-primario text-branco-primario p-4 cursor-pointer">
+          <div
+            onClick={() => {
+              showModal();
+              setContent(ModalEnvioErros);
+            }}
+            className="drop-shadow-md rounded-full bg-roxo-primario text-branco-primario p-4 cursor-pointer"
+          >
             <HiPlus size="2rem" />
           </div>
           <div className="drop-shadow-md rounded-full bg-roxo-primario text-branco-primario p-4 cursor-pointer">
