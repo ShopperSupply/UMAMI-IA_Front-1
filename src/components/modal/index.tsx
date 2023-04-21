@@ -5,7 +5,6 @@ const Modal = () => {
   const { isReversed, isOpen, content, hideModal } = useModal();
   const {errorsTypes, addError} = useData();
 
-  console.log(errorsTypes)
   return (
     <div
       className={`flex flex-row absolute w-screen z-0 ${isReversed ? "-reverse" : ""} ${

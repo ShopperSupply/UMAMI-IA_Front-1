@@ -9,10 +9,24 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import ConfirmAction from "../confirmAction";
+import { useUser } from "@/providers/userProvider";
+import { validate } from "@/services/post";
+import { toast } from "react-hot-toast";
+import { ISheet } from "@/interfaces/sheet";
 
 const ModalEnvioPlanilha = () => {
-  const { curators, places, currentBagPattern, excelFile } = useData();
+  const {
+    curators,
+    places,
+    currentBagPattern,
+    excelFile,
+    setExcelFile,
+    setCurrentCurator,
+    setCurrentPlace,
+    addError,
+  } = useData();
   const { hideModal, openAlert, isAlertOpen } = useModal();
+  const { token } = useUser();
   const [checked, setChecked] = useState<boolean>(false); //false = Manual e true = Sistêmico
   const [statusPlace, setStatusPlace] = useState<boolean>(false);
 
@@ -36,6 +50,8 @@ const ModalEnvioPlanilha = () => {
   });
 
   const onSubmit: SubmitHandler<IFormEnvioError> = (data) => {
+    // DEIXAR FIXO OS CURADOR E O LUGAR CASO ALGUMA PLANILHA JA TENHA SIDO ENVIADA.
+
     console.log("onsubmit");
     const findCurator = () => {
       const curator = curators.find(
@@ -75,273 +91,333 @@ const ModalEnvioPlanilha = () => {
       };
 
       if (!place) {
-        // if para verificar se um lugar exixte, caso contrario exixbir modal pedindo verificação dos dados inputados, se o QA responder true ele prossegue no envio da planilha
-        // caso contrario ele cancela a função de cadastro e exibe um toast reforçando a verificação .
         openAlert();
         if (statusPlace) {
+           toast("ESTOU TRABALHANDO NA SUA PLANILHA...", {
+             icon: (
+               <Image
+                 src={Icon_Robo}
+                 alt="Supp"
+                 className="h-[3rem] w-[3rem]"
+               />
+             ),
+             style: {
+               borderRadius: "50px",
+               background: "#F4F3F7",
+               color: "#3C2F58",
+               fontSize: "1.3rem",
+               fontWeight: "bolder",
+             },
+           });
           const body = makeBody();
-        } else {
+          validate(token, body)
+            .then((res) => {
+             console.log(res);
+            })
+            .catch((err) => {
+              console.error(err);
+              toast("OPS, ALGO DEU ERRADO.", {
+                icon: (
+                  <Image
+                    src={Icon_Robo}
+                    alt="Supp"
+                    className="h-[3rem] w-[3rem]"
+                  />
+                ),
+                style: {
+                  borderRadius: "50px",
+                  background: "#F4F3F7",
+                  color: "#3C2F58",
+                  fontSize: "1.3rem",
+                  fontWeight: "bolder",
+                },
+              });
+            });
         }
+      } else {
+        toast("EU NÃO CONHEÇO ESSE CURADOR NA SHOPPER SUPPLY", {
+          icon: (
+            <Image src={Icon_Robo} alt="Supp" className="h-[3rem] w-[3rem]" />
+          ),
+          style: {
+            borderRadius: "50px",
+            background: "#F4F3F7",
+            color: "#3C2F58",
+            fontSize: "1.3rem",
+            fontWeight: "bolder",
+          },
+        });
       }
-    } else {
-      // toast caso o curador não exixtir
     }
-  };
 
-  return (
-    <>
-      {isAlertOpen && (
-        <ConfirmAction
-          message="O canal de venda informado, ainda não está cadastrado, deseja realizar um novo cadastro?"
-          setStatus={setStatusPlace}
-        />
-      )}
+    const readResponse = (validation: ISheet) => {
+      for (let i = 0; i < validation.errors.length; i++) {
+        // addError(validation.errors[i],)
+        console.log(validation.errors[i]);
+      }
+    };
 
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className={`w-[25%] h-screen bg-branco-primario flex flex-col justify-around items-center animate-showModalAnimation absolute z-10`}
-      >
-        <Image src={Icon_Robo} alt="Supp"></Image>
-        <p className="text-roxo-primario text-3xl text-center p-3">
-          Preciso de mais informações antes de validar a planilha.
-        </p>
-        <div
-          className={`flex flex-col justify-center items-center w-[90%] ${
-            errors ? "gap-2" : "gap-4"
-          }`}
+    return (
+      <>
+        {isAlertOpen && (
+          <ConfirmAction
+            message="O canal de venda informado, ainda não está cadastrado, deseja realizar um novo cadastro?"
+            setStatus={setStatusPlace}
+          />
+        )}
+
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className={`w-[25%] h-screen bg-branco-primario flex flex-col justify-around items-center z-10 `}
         >
-          <label className="w-[80%]">
-            <input
-              {...register("curator")}
-              list="curatores"
-              placeholder={
-                errors.curator ? "Insira o curador responsavel" : "Alex Lanção"
-              }
-              title="Curador"
-              className={`w-[100%] rounded-full ${
-                errors.curator
-                  ? "border-red-600 focus:border-red-700"
-                  : "border-roxo-primario"
-              } px-[1rem] border-[.2rem] h-[4rem] text-[1.8rem] text-roxo-primario focus:border-roxo-primario focus:outline-none`}
-            />
-            {errors.curator && (
-              <span className="text-red-600 pl-5">
-                {errors.curator.message}
-              </span>
-            )}
-            <datalist id="curatores">
-              {curators.map((curator) => {
-                return <option key={curator.id} value={curator.name} />;
-              })}
-            </datalist>
-          </label>
-          <div className="flex felx-col w-[80%] gap-2">
-            <label className="flex flex-col w-[70%]">
+          <Image src={Icon_Robo} alt="Supp"></Image>
+          <p className="text-roxo-primario text-3xl text-center p-3">
+            Preciso de mais informações antes de validar a planilha.
+          </p>
+          <div
+            className={`flex flex-col justify-center items-center w-[90%] ${
+              errors ? "gap-2" : "gap-4"
+            }`}
+          >
+            <label className="w-[80%]">
               <input
-                {...register("client")}
-                list="client"
-                placeholder="ALSO"
-                title="Cliente"
-                className={`text-center w-[100%] rounded-full ${
-                  errors.client
+                {...register("curator")}
+                list="curatores"
+                placeholder={
+                  errors.curator
+                    ? "Insira o curador responsavel"
+                    : "Alex Lanção"
+                }
+                title="Curador"
+                className={`w-[100%] rounded-full ${
+                  errors.curator
                     ? "border-red-600 focus:border-red-700"
                     : "border-roxo-primario"
                 } px-[1rem] border-[.2rem] h-[4rem] text-[1.8rem] text-roxo-primario focus:border-roxo-primario focus:outline-none`}
               />
-              {errors?.client && (
+              {errors.curator && (
                 <span className="text-red-600 pl-5">
-                  {errors.client.message}
+                  {errors.curator.message}
                 </span>
               )}
-              <datalist id="client">
-                {places
-                  .reduce((clientesUnicos: any, item) => {
-                    if (!clientesUnicos.includes(item.client)) {
-                      clientesUnicos.push(item.client);
-                    }
-                    return clientesUnicos;
-                  }, [])
-                  .map((place: string, index: number) => {
-                    return <option key={index} value={place} />;
-                  })}
+              <datalist id="curatores">
+                {curators.map((curator) => {
+                  return <option key={curator.id} value={curator.name} />;
+                })}
               </datalist>
             </label>
-            <label className="flex flex-col w-[50%]">
-              <input
-                {...register("abbr")}
-                list="abbr"
-                placeholder="SDB"
-                title="Abreviação do projeto"
-                className={`text-center w-[100%] rounded-full ${
-                  errors.abbr
-                    ? "border-red-600 focus:border-red-700"
-                    : "border-roxo-primario"
-                } px-[1rem] border-[.2rem] h-[4rem] text-[1.8rem] text-roxo-primario focus:border-roxo-primario focus:outline-none`}
-              />
-              {errors?.abbr && (
-                <span className="text-red-600 pl-5">{errors.abbr.message}</span>
-              )}
-              <datalist id="abbr">
-                {places
-                  .reduce((clientesUnicos: any, item) => {
-                    if (!clientesUnicos.includes(item.abbr)) {
-                      clientesUnicos.push(item.abbr);
-                    }
-                    return clientesUnicos;
-                  }, [])
-                  .map((place: string, index: number) => {
-                    return <option key={index} value={place} />;
-                  })}
-              </datalist>
-            </label>
-          </div>
-          <div className="flex felx-col w-[80%] gap-2">
-            <label className="flex flex-col w-[50%]">
-              <input
-                {...register("mall")}
-                list="mall"
-                placeholder="Shopping da Bahia"
-                title="Shopping"
-                className={`text-center w-[100%] rounded-full ${
-                  errors.mall
-                    ? "border-red-600 focus:border-red-700"
-                    : "border-roxo-primario"
-                } px-[1rem] border-[.2rem] h-[4rem] text-[1.8rem] text-roxo-primario focus:border-roxo-primario focus:outline-none`}
-              />
-              {errors?.mall && (
-                <span className="text-red-600 pl-5">{errors.mall.message}</span>
-              )}
-              <datalist id="mall">
-                {places
-                  .reduce((clientesUnicos: any, item) => {
-                    if (!clientesUnicos.includes(item.mall)) {
-                      clientesUnicos.push(item.mall);
-                    }
-                    return clientesUnicos;
-                  }, [])
-                  .map((place: string, index: number) => {
-                    return <option key={index} value={place} />;
-                  })}
-              </datalist>
-            </label>
-            <label className="flex flex-col w-[50%]">
-              <input
-                {...register("place")}
-                list="place"
-                placeholder="Ri Happy"
-                title="Loja"
-                className={`text-center w-[100%] rounded-full ${
-                  errors.place
-                    ? "border-red-600 focus:border-red-700"
-                    : "border-roxo-primario"
-                } px-[1rem] border-[.2rem] h-[4rem] text-[1.8rem] text-roxo-primario focus:border-roxo-primario focus:outline-none`}
-              />
-              {errors?.place && (
-                <span className="text-red-600 pl-5">
-                  {errors.place.message}
-                </span>
-              )}
-              <datalist id="place">
-                {places
-                  .reduce((clientesUnicos: any, item) => {
-                    if (!clientesUnicos.includes(item.name)) {
-                      clientesUnicos.push(item.name);
-                    }
-                    return clientesUnicos;
-                  }, [])
-                  .map((place: string, index: number) => {
-                    return <option key={index} value={place} />;
-                  })}
-              </datalist>
-            </label>
-          </div>
-        </div>
-        <div className="w-[85%] items-center flex flex-col">
-          <div className="flex items-end gap-3">
-            <HiOutlineShoppingBag size="3rem" color="#5F4B8B" />
-            <h2 className="text-3xl text-roxo-primario">Padrão de Sacola</h2>
-          </div>
-          <div className="grid grid-cols-2 gap-2 w-[100%]">
-            <div>
-              <p className="text-roxo-primario text-opacity-35 text-3xl opacity-60">
-                IVA
-              </p>
-              <p className="text-roxo-primario text-opacity-35 text-3xl opacity-60">
-                Peso
-              </p>
-              <p className="text-roxo-primario text-opacity-35 text-3xl opacity-60">
-                Altura
-              </p>
-              <p className="text-roxo-primario text-opacity-35 text-3xl opacity-60">
-                Largura
-              </p>
-              <p className="text-roxo-primario text-opacity-35 text-3xl opacity-60">
-                Comprimento
-              </p>
+            <div className="flex felx-col w-[80%] gap-2">
+              <label className="flex flex-col w-[70%]">
+                <input
+                  {...register("client")}
+                  list="client"
+                  placeholder="ALSO"
+                  title="Cliente"
+                  className={`text-center w-[100%] rounded-full ${
+                    errors.client
+                      ? "border-red-600 focus:border-red-700"
+                      : "border-roxo-primario"
+                  } px-[1rem] border-[.2rem] h-[4rem] text-[1.8rem] text-roxo-primario focus:border-roxo-primario focus:outline-none`}
+                />
+                {errors?.client && (
+                  <span className="text-red-600 pl-5">
+                    {errors.client.message}
+                  </span>
+                )}
+                <datalist id="client">
+                  {places
+                    .reduce((clientesUnicos: any, item) => {
+                      if (!clientesUnicos.includes(item.client)) {
+                        clientesUnicos.push(item.client);
+                      }
+                      return clientesUnicos;
+                    }, [])
+                    .map((place: string, index: number) => {
+                      return <option key={index} value={place} />;
+                    })}
+                </datalist>
+              </label>
+              <label className="flex flex-col w-[50%]">
+                <input
+                  {...register("abbr")}
+                  list="abbr"
+                  placeholder="SDB"
+                  title="Abreviação do projeto"
+                  className={`text-center w-[100%] rounded-full ${
+                    errors.abbr
+                      ? "border-red-600 focus:border-red-700"
+                      : "border-roxo-primario"
+                  } px-[1rem] border-[.2rem] h-[4rem] text-[1.8rem] text-roxo-primario focus:border-roxo-primario focus:outline-none`}
+                />
+                {errors?.abbr && (
+                  <span className="text-red-600 pl-5">
+                    {errors.abbr.message}
+                  </span>
+                )}
+                <datalist id="abbr">
+                  {places
+                    .reduce((clientesUnicos: any, item) => {
+                      if (!clientesUnicos.includes(item.abbr)) {
+                        clientesUnicos.push(item.abbr);
+                      }
+                      return clientesUnicos;
+                    }, [])
+                    .map((place: string, index: number) => {
+                      return <option key={index} value={place} />;
+                    })}
+                </datalist>
+              </label>
             </div>
-            <div>
-              <p className="text-roxo-primario text-opacity-35 text-3xl text-right opacity-60">
-                {currentBagPattern.iva}
-              </p>
-              <p className="text-roxo-primario text-opacity-35 text-3xl text-right opacity-60">
-                {currentBagPattern.weight}g
-              </p>
-              <p className="text-roxo-primario text-opacity-35 text-3xl text-right opacity-60">
-                {currentBagPattern.height}cm
-              </p>
-              <p className="text-roxo-primario text-opacity-35 text-3xl text-right opacity-60">
-                {currentBagPattern.width}cm
-              </p>
-              <p className="text-roxo-primario text-opacity-35 text-3xl text-right opacity-60">
-                {currentBagPattern.length}cm
-              </p>
+            <div className="flex felx-col w-[80%] gap-2">
+              <label className="flex flex-col w-[50%]">
+                <input
+                  {...register("mall")}
+                  list="mall"
+                  placeholder="Shopping da Bahia"
+                  title="Shopping"
+                  className={`text-center w-[100%] rounded-full ${
+                    errors.mall
+                      ? "border-red-600 focus:border-red-700"
+                      : "border-roxo-primario"
+                  } px-[1rem] border-[.2rem] h-[4rem] text-[1.8rem] text-roxo-primario focus:border-roxo-primario focus:outline-none`}
+                />
+                {errors?.mall && (
+                  <span className="text-red-600 pl-5">
+                    {errors.mall.message}
+                  </span>
+                )}
+                <datalist id="mall">
+                  {places
+                    .reduce((clientesUnicos: any, item) => {
+                      if (!clientesUnicos.includes(item.mall)) {
+                        clientesUnicos.push(item.mall);
+                      }
+                      return clientesUnicos;
+                    }, [])
+                    .map((place: string, index: number) => {
+                      return <option key={index} value={place} />;
+                    })}
+                </datalist>
+              </label>
+              <label className="flex flex-col w-[50%]">
+                <input
+                  {...register("place")}
+                  list="place"
+                  placeholder="Ri Happy"
+                  title="Loja"
+                  className={`text-center w-[100%] rounded-full ${
+                    errors.place
+                      ? "border-red-600 focus:border-red-700"
+                      : "border-roxo-primario"
+                  } px-[1rem] border-[.2rem] h-[4rem] text-[1.8rem] text-roxo-primario focus:border-roxo-primario focus:outline-none`}
+                />
+                {errors?.place && (
+                  <span className="text-red-600 pl-5">
+                    {errors.place.message}
+                  </span>
+                )}
+                <datalist id="place">
+                  {places
+                    .reduce((clientesUnicos: any, item) => {
+                      if (!clientesUnicos.includes(item.name)) {
+                        clientesUnicos.push(item.name);
+                      }
+                      return clientesUnicos;
+                    }, [])
+                    .map((place: string, index: number) => {
+                      return <option key={index} value={place} />;
+                    })}
+                </datalist>
+              </label>
             </div>
           </div>
-        </div>
-        <div
-          onClick={() => setChecked(!checked)}
-          className="flex items-center space-x-2 mt-2 drop-shadow-md rounded-full w-[80%] cursor-pointer  bg-branco-primario box-border"
-        >
-          <div
-            className={`px-[14%] py-[1rem] my-[0.1rem] ${
-              !checked ? "bg-roxo-primario" : "bg-branco-primario"
-            } rounded-full text-3xl box-border`}
-          >
-            <p
-              className={`text-3xl ${
-                checked ? "text-roxo-primario " : "text-branco-primario"
-              }`}
-            >
-              Manual
-            </p>
+          <div className="w-[85%] items-center flex flex-col">
+            <div className="flex items-end gap-3">
+              <HiOutlineShoppingBag size="3rem" color="#5F4B8B" />
+              <h2 className="text-3xl text-roxo-primario">Padrão de Sacola</h2>
+            </div>
+            <div className="grid grid-cols-2 gap-2 w-[100%]">
+              <div>
+                <p className="text-roxo-primario text-opacity-35 text-3xl opacity-60">
+                  IVA
+                </p>
+                <p className="text-roxo-primario text-opacity-35 text-3xl opacity-60">
+                  Peso
+                </p>
+                <p className="text-roxo-primario text-opacity-35 text-3xl opacity-60">
+                  Altura
+                </p>
+                <p className="text-roxo-primario text-opacity-35 text-3xl opacity-60">
+                  Largura
+                </p>
+                <p className="text-roxo-primario text-opacity-35 text-3xl opacity-60">
+                  Comprimento
+                </p>
+              </div>
+              <div>
+                <p className="text-roxo-primario text-opacity-35 text-3xl text-right opacity-60">
+                  {currentBagPattern.iva}
+                </p>
+                <p className="text-roxo-primario text-opacity-35 text-3xl text-right opacity-60">
+                  {currentBagPattern.weight}g
+                </p>
+                <p className="text-roxo-primario text-opacity-35 text-3xl text-right opacity-60">
+                  {currentBagPattern.height}cm
+                </p>
+                <p className="text-roxo-primario text-opacity-35 text-3xl text-right opacity-60">
+                  {currentBagPattern.width}cm
+                </p>
+                <p className="text-roxo-primario text-opacity-35 text-3xl text-right opacity-60">
+                  {currentBagPattern.length}cm
+                </p>
+              </div>
+            </div>
           </div>
           <div
-            className={`px-[14%] py-[1rem] my-[0.1rem] ${
-              !checked ? "bg-branco-primario" : "bg-roxo-primario"
-            } rounded-full box-border`}
+            onClick={() => setChecked(!checked)}
+            className="flex items-center space-x-2 mt-2 drop-shadow-md rounded-full w-[80%] cursor-pointer  bg-branco-primario box-border"
           >
-            <p
-              className={`text-3xl ${
-                checked ? "text-branco-primario" : "text-roxo-primario"
-              } `}
+            <div
+              className={`px-[14%] py-[1rem] my-[0.1rem] ${
+                !checked ? "bg-roxo-primario" : "bg-branco-primario"
+              } rounded-full text-3xl box-border`}
             >
-              Sistêmico
-            </p>
-          </div>
+              <p
+                className={`text-3xl ${
+                  checked ? "text-roxo-primario " : "text-branco-primario"
+                }`}
+              >
+                Manual
+              </p>
+            </div>
+            <div
+              className={`px-[14%] py-[1rem] my-[0.1rem] ${
+                !checked ? "bg-branco-primario" : "bg-roxo-primario"
+              } rounded-full box-border`}
+            >
+              <p
+                className={`text-3xl ${
+                  checked ? "text-branco-primario" : "text-roxo-primario"
+                } `}
+              >
+                Sistêmico
+              </p>
+            </div>
 
-          {/* <input
+            {/* <input
             type="checkbox"
             className="cursor-pointer appearance-none w-[7rem] h-[4rem] focus:outline-none checked:bg-branco-primario bg-roxo-primario  rounded-full before:inline-block before:rounded-full before:bg-branco-primario before:h-[3.6rem] before:w-[3.6rem] checked:before:bg-roxo-primario checked:before:translate-x-[3rem] drop-shadow-md transition-all duration-500 before:ml-[.2rem] before:mt-[.2rem]"
           /> */}
-        </div>
-        <button
-          className="p-[1.5rem] bg-roxo-primario rounded-full drop-shadow-md"
-          title="Enviar"
-        >
-          <HiOutlineArrowUpTray color="#FFFFFF" size="2.7rem" />
-        </button>
-      </form>
-    </>
-  );
+          </div>
+          <button
+            className="p-[1.5rem] bg-roxo-primario rounded-full drop-shadow-md"
+            title="Enviar"
+          >
+            <HiOutlineArrowUpTray color="#FFFFFF" size="2.7rem" />
+          </button>
+        </form>
+      </>
+    );
+  };
 };
 export default ModalEnvioPlanilha;

@@ -24,24 +24,24 @@ const Menu = () => {
   const { setExcelFile, errorsLog } = useData();
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
     if (!errorsLog) {
-      const file = event.target.files?.[0];
+      toast("REVISE OS ERROS ANTES DE ENVIAR UMA NOVA PLANILHA", {
+        icon: <Image src={iconRobo} alt="Supp" className="h-[3rem] w-[3rem]" />,
+        style: {
+          borderRadius: "50px",
+          background: "#F4F3F7",
+          color: "#3C2F58",
+          fontSize: "1.3rem",
+          fontWeight: "bolder",
+        },
+      });
       if (file) {
         setExcelFile(file);
         setContent(<ModalEnvioPlanilha />);
         showModal();
       }
     }
-     toast("REVISE OS ERROS ANTES DE ENVIAR UMA NOVA PLANILHA", {
-       icon: <Image src={iconRobo} alt="Supp" className="h-[3rem] w-[3rem]" />,
-       style: {
-         borderRadius: "50px",
-         background: "#F4F3F7",
-         color: "#3C2F58",
-         fontSize: "1.3rem",
-         fontWeight: "bolder",
-       },
-     });
   };
 
   return (
