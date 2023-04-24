@@ -1,4 +1,5 @@
 import { createContext, useContext, useState } from "react";
+import { useData } from "./dataProvider";
 
 interface IModalProvider {
   children: React.ReactNode;
@@ -32,6 +33,8 @@ const ModalContext = createContext<IModalContext>({
 });
 
 export const ModalProvider = ({ children }: IModalProvider) => {
+  const { setExcelFile } = useData();
+
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [content, setContent] = useState<JSX.Element | undefined>(undefined);
   const [isReversed, setIsReversed] = useState<boolean>(false);
@@ -42,6 +45,7 @@ export const ModalProvider = ({ children }: IModalProvider) => {
     // Esconder o Modal ja aberto, essa função deve ser chamada para fechar um modal.
     setIsOpen(false);
     setContent(undefined);
+    setExcelFile(null);
   }
   function showModal() {
     // Mostrar um modal oculto, essa função deve ser chamada no componente para abrir o modal.
@@ -55,7 +59,7 @@ export const ModalProvider = ({ children }: IModalProvider) => {
   function openAlert() {
     setIsAlertOpen(true);
   }
-  function closeAlert(){
+  function closeAlert() {
     setIsAlertOpen(false);
   }
 
@@ -73,7 +77,7 @@ export const ModalProvider = ({ children }: IModalProvider) => {
 
         isAlertOpen,
         openAlert,
-        closeAlert
+        closeAlert,
       }}
     >
       {children}

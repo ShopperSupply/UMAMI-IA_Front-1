@@ -1,3 +1,5 @@
+import { IFormBag } from "./form";
+import { IPlace } from "./place";
 
 export interface ISheet {
   curator_id: number;
@@ -19,4 +21,12 @@ export interface ISheet {
   };
   workbook: string;
   errors: [];
+}
+
+export interface ISheetRequest {
+  spreadsheet: Blob | null;
+  curator_id: number;
+  modality: string;
+  bag_patterns: IFormBag;
+  place: IPlace;
 }

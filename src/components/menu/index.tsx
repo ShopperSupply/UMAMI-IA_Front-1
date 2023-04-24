@@ -21,11 +21,11 @@ import iconRobo from "../../../public/Icon_Robo.svg";
 
 const Menu = () => {
   const { setContent, showModal, reverseModal } = useModal();
-  const { setExcelFile, errorsLog } = useData();
+  const { setExcelFile, errorsLog, excelFile } = useData();
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (!errorsLog) {
+    if (errorsLog.length > 0) {
       toast("REVISE OS ERROS ANTES DE ENVIAR UMA NOVA PLANILHA", {
         icon: <Image src={iconRobo} alt="Supp" className="h-[3rem] w-[3rem]" />,
         style: {
@@ -36,11 +36,11 @@ const Menu = () => {
           fontWeight: "bolder",
         },
       });
-      if (file) {
-        setExcelFile(file);
-        setContent(<ModalEnvioPlanilha />);
-        showModal();
-      }
+      event.target.value = "";
+    } else if (file) {
+      setExcelFile(file);
+      setContent(<ModalEnvioPlanilha />);
+      showModal();
     }
   };
 
@@ -78,24 +78,26 @@ const Menu = () => {
         </ul>
       </div>
       <div className="flex flex-col gap-[2rem]">
-        <label
-          htmlFor="dropzone-file"
-          className="mx-[2.2rem] px-[1rem] py-[.6rem] cursor-pointer flex justify-around max-w-lg flex-col items-center rounded-xl border-2 border-dashed border-roxo-primario text-center"
-        >
-          <h2 className="mt-4 text-[1.5rem] text-roxo-primario font-medium tracking-wide">
-            Revisar planilha
-          </h2>
-          <p className="mt-2 text-[.9rem] text-roxo-primario opacity-80 tracking-wide">
-            Arraste e soute ou clique, para enviar uma planilha para revisão.
-          </p>
-          <IoMdAddCircle color="#5F4B8B" size="3.5rem" />
-          <input
-            id="dropzone-file"
-            type="file"
-            className="hidden"
-            onChange={handleFileUpload}
-          />
-        </label>
+        <form>
+          <label
+            htmlFor="dropzone-file"
+            className="mx-[2.2rem] px-[1rem] py-[.6rem] cursor-pointer flex justify-around max-w-lg flex-col items-center rounded-xl border-2 border-dashed border-roxo-primario text-center"
+          >
+            <h2 className="mt-4 text-[1.5rem] text-roxo-primario font-medium tracking-wide">
+              Revisar planilha
+            </h2>
+            <p className="mt-2 text-[.9rem] text-roxo-primario opacity-80 tracking-wide">
+              Arraste e soute ou clique, para enviar uma planilha para revisão.
+            </p>
+            <IoMdAddCircle color="#5F4B8B" size="3.5rem" />
+            <input
+              id="dropzone-file"
+              type="file"
+              className="hidden"
+              onChange={handleFileUpload}
+            />
+          </label>
+        </form>
         <ul className="flex flex-col gap-[2rem] ">
           <li className="flex items-center gap-[1rem] ml-[2.2rem] opacity-50 cursor-pointer">
             <HiOutlineSaveAs color="#5F4B8B" size="2.5rem" />

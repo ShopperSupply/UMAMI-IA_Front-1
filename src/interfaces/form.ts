@@ -20,16 +20,16 @@ export interface IFormBag {
 }
 
 export interface IFormPlanilha {
-  spreadsheet: File | null;
-  curator_id: number;
-  modality: string;
-  bag_patterns: IFormBag;
-  place: IPlace;
+  curator: number;
+  client: string;
+  abbr: string;
+  mall: string;
+  place: string;
 }
 
 export interface IConfirmAction {
   message: string;
-  setStatus: React.Dispatch<React.SetStateAction<boolean>>
+  setStatus: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface IFormLogin {

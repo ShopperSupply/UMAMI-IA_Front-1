@@ -25,8 +25,8 @@ interface IDataContext {
   currentBagPattern: IBag;
   setCurrentBagPattern: (bag: IBag) => void;
 
-  excelFile: File | null;
-  setExcelFile: React.Dispatch<React.SetStateAction<File | null>>;
+  excelFile: Blob | null;
+  setExcelFile: React.Dispatch<React.SetStateAction<Blob | null>>;
 }
 
 const DataContext = createContext<IDataContext>({
@@ -85,15 +85,15 @@ export const DataProvider = ({ children }: IDataProvider) => {
     weight: 200,
     length: 40,
   });
-  const [excelFile, setExcelFile] = useState<File | null>(null);
-  const {token, auth} = useUser()
+  const [excelFile, setExcelFile] = useState<Blob | null>(null);
+  const { token, auth } = useUser();
 
-  useEffect(()=> {
-    if (auth){
+  useEffect(() => {
+    if (auth) {
       getCurators(token || "", setCurators);
       getErrorTypes(token || "", setErrors);
     }
-  },[auth, token])
+  }, [auth, token]);
 
   const addError = (newError: IErrorLog) => {
     setErrorsLog([...errorsLog, newError]);
@@ -118,7 +118,7 @@ export const DataProvider = ({ children }: IDataProvider) => {
         setCurrentBagPattern,
 
         excelFile,
-        setExcelFile
+        setExcelFile,
       }}
     >
       {children}
