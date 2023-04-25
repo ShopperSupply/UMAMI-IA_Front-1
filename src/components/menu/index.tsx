@@ -17,6 +17,7 @@ import ModalEnvioErros from "../modalEnvioErros";
 import { useData } from "@/providers/dataProvider";
 import ModalEnvioPlanilha from "../modalEnvioPlanilha";
 import { toast } from "react-hot-toast";
+import { error } from "@/utils/toast";
 import iconRobo from "../../../public/Icon_Robo.svg";
 
 const Menu = () => {
@@ -26,16 +27,7 @@ const Menu = () => {
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (errorsLog.length > 0) {
-      toast("REVISE OS ERROS ANTES DE ENVIAR UMA NOVA PLANILHA", {
-        icon: <Image src={iconRobo} alt="Supp" className="h-[3rem] w-[3rem]" />,
-        style: {
-          borderRadius: "50px",
-          background: "#F4F3F7",
-          color: "#3C2F58",
-          fontSize: "1.3rem",
-          fontWeight: "bolder",
-        },
-      });
+      error("REVISE OS ERROS ANTES DE ENVIAR UMA NOVA PLANILHA");
       event.target.value = "";
     } else if (file) {
       setExcelFile(file);

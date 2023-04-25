@@ -14,17 +14,22 @@ import { validateSheet } from "@/services/post";
 import { error, info } from "@/utils/toast";
 import { ISheet, ISheetRequest } from "@/interfaces/sheet";
 import { findCurator, findPlace } from "@/utils/finds";
+import { AxiosResponse } from "axios";
 
 const ModalEnvioPlanilha = () => {
   const {
     curators,
     places,
     currentBagPattern,
+    currentCurator,
+    currentPlace,
+    errorsLog,
     excelFile,
     setExcelFile,
     setCurrentCurator,
     setCurrentPlace,
     addError,
+    setErrorsLog,
   } = useData();
   const { hideModal, openAlert, isAlertOpen } = useModal();
   const { token } = useUser();
@@ -76,12 +81,20 @@ const ModalEnvioPlanilha = () => {
 
       const body = makeBody();
       validateSheet(token, body)
-        .then((res) => {
-          console.log(res);
+        .then((res: void | AxiosResponse<ISheet>) => {
+          if (res) {
+            setErrorsLog(res.data.errors);
+            setCurrentCurator(res.data.curator);
+            setCurrentPlace(res.data.place_obj);
+          }
         })
         .catch((err) => {
           console.log(err);
           error("OPS! ALGO DEU ERRADO");
+        })
+        .finally(() => {
+          setStatusPlace(false);
+          hideModal();
         });
     }
   }, [statusPlace, token]);
@@ -98,16 +111,11 @@ const ModalEnvioPlanilha = () => {
       const place = findPlace(places, data);
       if (!place) {
         openAlert();
+      } else {
+        setStatusPlace(true);
       }
     } else {
       error("EU NÃO CONHEÇO ESSE CURADOR");
-    }
-  };
-
-  const readResponse = (validation: ISheet) => {
-    for (let i = 0; i < validation.errors.length; i++) {
-      // addError(validation.errors[i],)
-      console.log(validation.errors[i]);
     }
   };
 
@@ -115,7 +123,7 @@ const ModalEnvioPlanilha = () => {
     <>
       {isAlertOpen && (
         <ConfirmAction
-          message="O canal de venda informado, ainda não está cadastrado, deseja realizar um novo cadastro?"
+          message="O CANAL DE VENDA INFORMADO AINDA NÃO FOI CADASTRADO, DESEJA CADASTRAR ESSE COMO NOVO?"
           setStatus={setStatusPlace}
         />
       )}

@@ -11,7 +11,17 @@ import * as yup from "yup";
 import { toast } from "react-hot-toast";
 
 const ModalEnvioErros = () => {
-  const { curators, places, errorsTypes, errorsLog, addError, setCurrentCurator, setCurrentPlace} = useData();
+  const {
+    curators,
+    places,
+    errorsTypes,
+    errorsLog,
+    currentCurator,
+    currentPlace,
+    addError,
+    setCurrentCurator,
+    setCurrentPlace,
+  } = useData();
   const { hideModal } = useModal();
 
   const schema = yup.object().shape({
@@ -43,14 +53,13 @@ const ModalEnvioErros = () => {
   });
 
   const onSubmit: SubmitHandler<IFormEnvioError> = (data) => {
-      const curator = curators.find(
-        (curador) => curador.name?.toLowerCase() == data.curator.toLowerCase()
-      );
+    const curator = curators.find(
+      (curador) => curador.name?.toLowerCase() == data.curator.toLowerCase()
+    );
 
-      const errorType = errorsTypes.find((error) =>
-        data.error_type.toLowerCase().includes(error.title.toLowerCase())
-      );
-
+    const errorType = errorsTypes.find((error) =>
+      data.error_type.toLowerCase().includes(error.title.toLowerCase())
+    );
 
     if (errorType) {
       const body: IErrorLog = {
@@ -58,13 +67,13 @@ const ModalEnvioErros = () => {
         coor: data.coor,
         sheet: data.sheet,
       };
-      
-    // if para deixar fixo o valor dos inputs
-    // if (errorsLog) {
-    //   setCurrentCurator(curator?.name)
-    //   setCurrentPlace()
-    // }  
-      
+
+      // if para deixar fixo o valor dos inputs
+      // if (errorsLog) {
+      //   setCurrentCurator(curator?.name)
+      //   setCurrentPlace()
+      // }
+
       addError(body);
 
       toast("ERRO ADICIONADO COM SUCESSO", {
@@ -97,6 +106,10 @@ const ModalEnvioErros = () => {
           <input
             {...register("curator")}
             list="curatores"
+            value={errorsLog ? currentCurator.name : undefined}
+            style={{
+              pointerEvents: errorsLog.length > 0 ? "none" : "auto",
+            }}
             placeholder={
               errors.curator ? "Insira o curador responsavel" : "Alex Lanção"
             }
@@ -195,6 +208,10 @@ const ModalEnvioErros = () => {
                 list="client"
                 placeholder="ALSO"
                 title="Cliente"
+                value={errorsLog.length > 0 ? currentPlace.client : undefined}
+                style={{
+                  pointerEvents: errorsLog.length > 0 ? "none" : "auto",
+                }}
                 className={`text-center w-[100%] rounded-full ${
                   errors.client
                     ? "border-red-600 focus:border-red-700"
@@ -225,6 +242,10 @@ const ModalEnvioErros = () => {
                 list="abbr"
                 placeholder="SDB"
                 title="Abreviação do projeto"
+                value={errorsLog.length > 0 ? currentPlace.abbr : undefined}
+                style={{
+                  pointerEvents: errorsLog.length > 0 ? "none" : "auto",
+                }}
                 className={`text-center w-[100%] rounded-full ${
                   errors.abbr
                     ? "border-red-600 focus:border-red-700"
@@ -255,6 +276,10 @@ const ModalEnvioErros = () => {
                 list="mall"
                 placeholder="Shopping da Bahia"
                 title="Shopping"
+                value={errorsLog.length > 0 ? currentPlace.mall : undefined}
+                style={{
+                  pointerEvents: errorsLog.length > 0 ? "none" : "auto",
+                }}
                 className={`text-center w-[100%] rounded-full ${
                   errors.mall
                     ? "border-red-600 focus:border-red-700"
@@ -283,6 +308,10 @@ const ModalEnvioErros = () => {
                 list="place"
                 placeholder="Ri Happy"
                 title="Loja"
+                value={errorsLog.length > 0 ? currentPlace.name : undefined}
+                style={{
+                  pointerEvents: errorsLog.length > 0 ? "none" : "auto",
+                }}
                 className={`text-center w-[100%] rounded-full ${
                   errors.place
                     ? "border-red-600 focus:border-red-700"

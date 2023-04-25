@@ -4,8 +4,8 @@ import { IConfirmAction } from "@/interfaces/form";
 import { useModal } from "@/providers/modaisProvider";
 
 const ConfirmAction = ({ message, setStatus }: IConfirmAction) => {
-  const {closeAlert} = useModal()
-  
+  const { closeAlert } = useModal();
+
   return (
     <div className="w-screen h-screen flex justify-center absolute z-10">
       <div className="bg-branco-primario drop-shadow-md w-[23vw] absolute mt-[1rem] rounded-[10px] p-6 animate-showPopAnimation ease-in-out">
@@ -20,11 +20,18 @@ const ConfirmAction = ({ message, setStatus }: IConfirmAction) => {
         </p>
         <div className="flex justify-center gap-5 mt-4">
           <button
-          onClick={() => setStatus(true)}
-           className="bg-severity-2 py-1 px-7 text-[1.5rem] font-semibold rounded-full shadow-inner drop-shadow-sm focus:outline-roxo-primario">
+            onClick={() => {
+              setStatus(true);
+              closeAlert();
+            }}
+            className="bg-severity-2 py-1 px-7 text-[1.5rem] font-semibold rounded-full shadow-inner drop-shadow-sm focus:outline-roxo-primario"
+          >
             Sim
           </button>
-          <button onClick={closeAlert} className="bg-severity-5 py-1 px-7 text-[1.5rem] font-semibold rounded-full text-branco-secundario shadow-inner drop-shadow-sm focus:outline-roxo-primario">
+          <button
+            onClick={closeAlert}
+            className="bg-severity-5 py-1 px-7 text-[1.5rem] font-semibold rounded-full text-branco-secundario shadow-inner drop-shadow-sm focus:outline-roxo-primario"
+          >
             Não
           </button>
         </div>

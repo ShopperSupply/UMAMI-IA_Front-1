@@ -1,17 +1,19 @@
 import { IFormBag } from "./form";
 import { IPlace } from "./place";
+import { ICurator } from "./people";
+import { IErrorLog } from "./errors";
 
 export interface ISheet {
-  curator_id: number;
+  curator: ICurator;
   modality: string;
-  bag_patterns: {
+  bag: {
     iva: number;
     height: number;
     width: number;
     length: number;
     weight: number;
   };
-  place: {
+  place_obj: {
     id: string;
     client: string;
     mall: string;
@@ -20,7 +22,7 @@ export interface ISheet {
     is_active: true;
   };
   workbook: string;
-  errors: [];
+  errors: IErrorLog[];
 }
 
 export interface ISheetRequest {

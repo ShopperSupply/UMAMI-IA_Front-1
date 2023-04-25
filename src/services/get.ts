@@ -1,6 +1,7 @@
 import { ICurator } from "@/interfaces/people";
 import api from "./";
 import { IErrosTypes } from "@/interfaces/errors";
+import { IPlace } from "@/interfaces/place";
 
 export function getCurators(
   token: string,
@@ -28,4 +29,17 @@ export function getErrorTypes(
       },
     })
     .then((res) => setErrorTypes(res.data));
+}
+
+export function getPlaces(
+  token: string,
+  setPlaces: React.Dispatch<React.SetStateAction<IPlace[]>>
+) {
+  api
+    .get("/canal_de_vendas", {
+      headers: {
+        Authorization: "Token " + token,
+      },
+    })
+    .then((res) => setPlaces(res.data));
 }

@@ -3,7 +3,7 @@ import { IErrosTypes, IErroLogBody, IErrorLog } from "../interfaces/errors";
 import { ICurator } from "../interfaces/people";
 import { IPlace } from "../interfaces/place";
 import { IBag } from "@/interfaces/bagpattern";
-import { getCurators, getErrorTypes } from "@/services/get";
+import { getCurators, getErrorTypes, getPlaces } from "@/services/get";
 import { useUser } from "./userProvider";
 
 interface IDataProvider {
@@ -12,6 +12,7 @@ interface IDataProvider {
 interface IDataContext {
   errorsTypes: IErrosTypes[];
   errorsLog: IErrorLog[];
+  setErrorsLog: React.Dispatch<React.SetStateAction<IErrorLog[]>>;
   addError: (newError: IErrorLog) => void;
 
   curators: ICurator[];
@@ -41,6 +42,7 @@ const DataContext = createContext<IDataContext>({
     },
   ],
   errorsLog: [{}],
+  setErrorsLog: () => {},
   addError: () => {},
 
   curators: [{}],
@@ -92,6 +94,8 @@ export const DataProvider = ({ children }: IDataProvider) => {
     if (auth) {
       getCurators(token || "", setCurators);
       getErrorTypes(token || "", setErrors);
+
+      getPlaces(token || "", setPlace);
     }
   }, [auth, token]);
 
@@ -104,6 +108,7 @@ export const DataProvider = ({ children }: IDataProvider) => {
       value={{
         errorsTypes,
         errorsLog,
+        setErrorsLog,
         addError,
 
         curators,

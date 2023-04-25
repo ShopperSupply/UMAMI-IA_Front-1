@@ -9,7 +9,6 @@ export function login(data?: IFormLogin) {
 }
 
 export function validateSheet(token?: string, body?: FormData) {
-  console.log(body);
   const response = api
     .post("/planilha/", body, {
       headers: {
@@ -18,8 +17,6 @@ export function validateSheet(token?: string, body?: FormData) {
       },
     })
     .then((res) => {
-      console.log("Validations successful");
-      console.log(res);
       return res;
     })
     .catch((err) => console.error(err));
