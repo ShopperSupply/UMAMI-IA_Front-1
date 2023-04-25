@@ -33,6 +33,7 @@ const Menu = () => {
       setExcelFile(file);
       setContent(<ModalEnvioPlanilha />);
       showModal();
+      event.target.value = null || "";
     }
   };
 
