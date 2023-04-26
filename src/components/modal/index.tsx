@@ -3,13 +3,13 @@ import { useModal } from "@/providers/modaisProvider";
 
 const Modal = () => {
   const { isReversed, isOpen, content, hideModal } = useModal();
-  const {errorsTypes, addError} = useData();
+  const { errorsTypes, addError } = useData();
 
   return (
     <div
-      className={`flex flex-row absolute w-screen z-0 ${isReversed ? "-reverse" : ""} ${
-        !isOpen ? "hidden" : ""
-      } transition `}
+      className={`flex absolute w-screen z-0 ${
+        isReversed ? "flex-row-reverse" : "flex-row"
+      } ${!isOpen ? "hidden" : ""} transition `}
     >
       {content}
       <div

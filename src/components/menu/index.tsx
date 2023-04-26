@@ -19,6 +19,7 @@ import ModalEnvioPlanilha from "../modalEnvioPlanilha";
 import { toast } from "react-hot-toast";
 import { error } from "@/utils/toast";
 import iconRobo from "../../../public/Icon_Robo.svg";
+import ModalUsuario from "../modalUsuario";
 
 const Menu = () => {
   const { setContent, showModal, reverseModal } = useModal();
@@ -116,7 +117,14 @@ const Menu = () => {
               className="cursor-pointer appearance-none w-[7rem] h-[4rem] focus:outline-none checked:bg-branco-primario bg-roxo-primario  rounded-full before:inline-block before:rounded-full before:bg-branco-primario before:h-[3.6rem] before:w-[3.6rem] checked:before:bg-roxo-primario checked:before:translate-x-[3rem] drop-shadow-md transition-all duration-500 before:ml-[.2rem] before:mt-[.2rem]"
             />
 
-            <button className="bg-branco-secundario p-[1.1rem] rounded-full drop-shadow-sm hover:bg-roxo-primario hover:text-branco-primario transition-colors">
+            <button
+              onClick={() => {
+                setContent(<ModalUsuario />);
+                reverseModal();
+                showModal();
+              }}
+              className="bg-branco-secundario p-[1.1rem] rounded-full drop-shadow-sm hover:bg-roxo-primario hover:text-branco-primario transition-colors"
+            >
               <HiOutlineUser size="2.5rem" />
             </button>
           </div>

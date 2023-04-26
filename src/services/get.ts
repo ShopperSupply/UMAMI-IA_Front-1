@@ -1,4 +1,4 @@
-import { ICurator } from "@/interfaces/people";
+import { ICurator, IUserDetail } from "@/interfaces/people";
 import api from "./";
 import { IErrosTypes } from "@/interfaces/errors";
 import { IPlace } from "@/interfaces/place";
@@ -42,4 +42,14 @@ export function getPlaces(
       },
     })
     .then((res) => setPlaces(res.data));
+}
+
+export function getProfile(token: string): Promise<IUserDetail> {
+  return api
+    .get("usuarios/perfil", {
+      headers: {
+        Authorization: "Token " + token,
+      },
+    })
+    .then((res) => res.data);
 }

@@ -344,14 +344,14 @@ const ModalEnvioErros = () => {
             className="p-[1.5rem] bg-roxo-primario rounded-full drop-shadow-md"
             title="Enviar"
           >
-            <HiPlus color="#FFFFFF" size="3rem" />
+            <HiPlus color="#FFFFFF" size="2rem" />
           </button>
           <button
             onClick={hideModal}
             className="p-[1.5rem] bg-roxo-primario rounded-full drop-shadow-md"
             title="Enviar"
           >
-            <HiOutlineXMark color="#FFFFFF" size="3rem" />
+            <HiOutlineXMark color="#FFFFFF" size="2rem" />
           </button>
         </div>
       </form>
