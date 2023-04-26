@@ -30,6 +30,7 @@ const ModalEnvioPlanilha = () => {
     setCurrentPlace,
     addError,
     setErrorsLog,
+    setResponseFile,
   } = useData();
   const { hideModal, openAlert, isAlertOpen } = useModal();
   const { token } = useUser();
@@ -86,6 +87,7 @@ const ModalEnvioPlanilha = () => {
             setErrorsLog(res.data.errors);
             setCurrentCurator(res.data.curator);
             setCurrentPlace(res.data.place_obj);
+            setResponseFile(res.data.workbook);
           }
         })
         .catch((err) => {
@@ -130,7 +132,7 @@ const ModalEnvioPlanilha = () => {
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className={`w-[25%] h-screen bg-branco-primario flex flex-col justify-around items-center z-10 `}
+        className={`w-[25%] min-w-[35rem] h-screen bg-branco-primario flex flex-col justify-around items-center z-10 `}
       >
         <Image src={Icon_Robo} alt="Supp"></Image>
         <p className="text-roxo-primario text-3xl text-center p-3">

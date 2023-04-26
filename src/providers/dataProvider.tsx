@@ -14,6 +14,7 @@ interface IDataContext {
   errorsLog: IErrorLog[];
   setErrorsLog: React.Dispatch<React.SetStateAction<IErrorLog[]>>;
   addError: (newError: IErrorLog) => void;
+  ignoreError: (errorId: number) => void;
 
   curators: ICurator[];
   currentCurator: ICurator;
@@ -28,6 +29,9 @@ interface IDataContext {
 
   excelFile: Blob | null;
   setExcelFile: React.Dispatch<React.SetStateAction<Blob | null>>;
+
+  responseFile: string;
+  setResponseFile: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const DataContext = createContext<IDataContext>({
@@ -44,6 +48,7 @@ const DataContext = createContext<IDataContext>({
   errorsLog: [{}],
   setErrorsLog: () => {},
   addError: () => {},
+  ignoreError: () => {},
 
   curators: [{}],
   currentCurator: {},
@@ -61,6 +66,9 @@ const DataContext = createContext<IDataContext>({
 
   excelFile: null,
   setExcelFile: () => {},
+
+  responseFile: "",
+  setResponseFile: () => {},
 });
 
 export const DataProvider = ({ children }: IDataProvider) => {
@@ -88,6 +96,8 @@ export const DataProvider = ({ children }: IDataProvider) => {
     length: 40,
   });
   const [excelFile, setExcelFile] = useState<Blob | null>(null);
+  const [responseFile, setResponseFile] = useState<string>("");
+
   const { token, auth } = useUser();
 
   useEffect(() => {
@@ -103,6 +113,12 @@ export const DataProvider = ({ children }: IDataProvider) => {
     setErrorsLog([...errorsLog, newError]);
   };
 
+  const ignoreError = (errorId: number) => {
+    const errorList = [...errorsLog];
+    errorList.splice(errorId, 1);
+    setErrorsLog(errorList);
+  };
+
   return (
     <DataContext.Provider
       value={{
@@ -110,6 +126,7 @@ export const DataProvider = ({ children }: IDataProvider) => {
         errorsLog,
         setErrorsLog,
         addError,
+        ignoreError,
 
         curators,
         currentCurator,
@@ -124,6 +141,9 @@ export const DataProvider = ({ children }: IDataProvider) => {
 
         excelFile,
         setExcelFile,
+
+        responseFile,
+        setResponseFile,
       }}
     >
       {children}

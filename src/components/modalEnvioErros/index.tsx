@@ -90,7 +90,7 @@ const ModalEnvioErros = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center gap-[3rem] w-[25%] h-screen bg-branco-primario drop-shadow-md px-5 animate-showModalAnimation absolute z-10">
+    <div className="flex flex-col justify-center items-center gap-[3rem] w-[25%] min-w-[35rem] h-screen bg-branco-primario drop-shadow-md px-5 animate-showModalAnimation absolute z-10">
       <Image src={iconRobo} alt="Incone robô de qualidade Shopper" />
       <p className="text-roxo-primario text-[1.8rem] text-center">
         Aqui você pode cadastrar um ou mais erros, tenha certeza de que todas as

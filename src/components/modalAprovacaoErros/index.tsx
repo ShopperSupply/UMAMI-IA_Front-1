@@ -5,9 +5,24 @@ import { useModal } from "@/providers/modaisProvider";
 import ModalEnvioErros from "../modalEnvioErros";
 import ConfirmAction from "../confirmAction";
 import { useEffect, useState } from "react";
+import { submitErrorLog } from "@/services/post";
+import { useUser } from "@/providers/userProvider";
+import { IErroLogBody } from "@/interfaces/errors";
+import { info } from "@/utils/toast";
+import { triggerBase64Download } from "@/utils/downloadBlob";
 
 const ModalAprovacaoErros = () => {
-  const { errorsLog, addError, setErrorsLog } = useData();
+  const {
+    errorsLog,
+    addError,
+    ignoreError,
+    setErrorsLog,
+    responseFile,
+    excelFile,
+    currentCurator,
+    currentPlace,
+  } = useData();
+  const { token } = useUser();
   const { showModal, setContent, isAlertOpen, openAlert } = useModal();
   const [statusErrorsLog, setStatusErrorsLog] = useState<boolean>(false);
 
@@ -32,6 +47,24 @@ const ModalAprovacaoErros = () => {
     }
   }, [statusErrorsLog, setErrorsLog]);
 
+  const submitErrorsList = () => {
+    errorsLog.forEach((element) => {
+      const skuError = {
+        place: currentPlace,
+        coor: element.coor,
+        sheet: element.sheet,
+      };
+      const body: IErroLogBody = {
+        curator_id: currentCurator.id,
+        error_type_id: element.error_type!.id,
+        sku_error: JSON.stringify(skuError),
+      };
+      submitErrorLog(token || "", body);
+    });
+    info("TODOS OS ERROS FORAM ADICIONADOS COM SUCESSO");
+    setErrorsLog([]);
+  };
+
   return (
     <div
       className={`flex flex-row-reverse 
@@ -44,11 +77,11 @@ const ModalAprovacaoErros = () => {
     >
       {isAlertOpen && (
         <ConfirmAction
-          message="TEM CERTEZA QUE DESEJA DISCARTAR TODOS OS ERROS?"
+          message="TEM CERTEZA QUE DESEJA DESCARTAR TODOS OS ERROS?"
           setStatus={setStatusErrorsLog}
         />
       )}
-      <div className=" flex flex-col justify-between items-center w-[25%] h-screen bg-branco-primario drop-shadow-md">
+      <div className=" flex flex-col justify-between items-center w-[25%] min-w-[35rem] h-screen bg-branco-primario drop-shadow-md">
         <div className="overflow-y-auto flex flex-col w-[100%] text-roxo-primario text-[1.2rem] font-semibold">
           {errorsLog?.map((error, i) => {
             return (
@@ -68,7 +101,15 @@ const ModalAprovacaoErros = () => {
                   <p>{error.coor}</p>
                 </div>
                 <p className="w-[60%] text-center">{error.error_type?.title}</p>
-                <HiOutlineTrash size="2rem" className="cursor-pointer" />
+                <HiOutlineTrash
+                  title="Ignorar esse erro"
+                  onClick={() => {
+                    info("SEU ERRO FOI  IGNORADO");
+                    ignoreError(i);
+                  }}
+                  size="2rem"
+                  className="cursor-pointer"
+                />
               </div>
             );
           })}
@@ -78,6 +119,7 @@ const ModalAprovacaoErros = () => {
             onClick={() => {
               openAlert();
             }}
+            title="Descartar Lista de Erros"
             className="drop-shadow-md rounded-full font-bold bg-branco-primario text-roxo-primario p-4 cursor-pointer"
           >
             <HiArrowUturnLeft size="2rem" fontWeight="900" />
@@ -87,14 +129,26 @@ const ModalAprovacaoErros = () => {
               setContent(<ModalEnvioErros />);
               showModal();
             }}
+            title="Adicionar Erro a Lista"
             className="drop-shadow-md rounded-full bg-roxo-primario text-branco-primario p-4 cursor-pointer"
           >
             <HiPlus size="2rem" />
           </div>
-          <div className="drop-shadow-md rounded-full bg-roxo-primario text-branco-primario p-4 cursor-pointer">
+          <div
+            onClick={submitErrorsList}
+            title="Aprovar Lista de Erros"
+            className="drop-shadow-md rounded-full bg-roxo-primario text-branco-primario p-4 cursor-pointer"
+          >
             <HiCheck size="2rem" />
           </div>
-          <div className="drop-shadow-md rounded-full bg-branco-primario text-roxo-primario p-4 cursor-pointer">
+          <div
+            onClick={() => {
+              triggerBase64Download(responseFile, excelFile!.name);
+              info(`PANILHA ${excelFile?.name} PRONTA!`);
+            }}
+            title="Baixar Planilha Verificada"
+            className="drop-shadow-md rounded-full bg-branco-primario text-roxo-primario p-4 cursor-pointer"
+          >
             <HiDownload size="2rem" />
           </div>
         </div>

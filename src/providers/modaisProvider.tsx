@@ -45,7 +45,7 @@ export const ModalProvider = ({ children }: IModalProvider) => {
     // Esconder o Modal ja aberto, essa função deve ser chamada para fechar um modal.
     setIsOpen(false);
     setContent(undefined);
-    setExcelFile(null);
+    // setExcelFile(null);
   }
   function showModal() {
     // Mostrar um modal oculto, essa função deve ser chamada no componente para abrir o modal.
