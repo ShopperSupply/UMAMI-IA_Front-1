@@ -7,8 +7,8 @@ const Modal = () => {
 
   return (
     <div
-      className={`flex absolute w-screen z-0 ${
-        isReversed ? "flex-row-reverse" : "flex-row"
+      className={`flex absolute w-screen  ${
+        isReversed ? "flex-row-reverse z-20" : "flex-row z-0"
       } ${!isOpen ? "hidden" : ""} transition `}
     >
       {content}
