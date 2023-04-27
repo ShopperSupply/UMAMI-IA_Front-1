@@ -20,6 +20,7 @@ import { toast } from "react-hot-toast";
 import { error } from "@/utils/toast";
 import iconRobo from "../../../public/Icon_Robo.svg";
 import ModalUsuario from "../modalUsuario";
+import ModalComparaPlanilha from "../modalComparaPlanilha";
 
 const Menu = () => {
   const { setContent, showModal, reverseModal } = useModal();
@@ -87,13 +88,19 @@ const Menu = () => {
             <input
               id="dropzone-file"
               type="file"
-              className="hidden"
+              className="absolute text-[5rem] opacity-0"
               onChange={handleFileUpload}
             />
           </label>
         </form>
         <ul className="flex flex-col gap-[2rem] ">
-          <li className="flex items-center gap-[1rem] ml-[2.2rem] opacity-50 cursor-pointer">
+          <li
+            onClick={() => {
+              setContent(<ModalComparaPlanilha />);
+              showModal();
+            }}
+            className="flex items-center gap-[1rem] ml-[2.2rem] cursor-pointer"
+          >
             <HiOutlineSaveAs color="#5F4B8B" size="2.5rem" />
             Comparação
           </li>
